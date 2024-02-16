@@ -18,25 +18,20 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public Banner createBanner(Banner banner) {
 
-        Banner savedBanner =bannerRepository.save(banner);
-
-        return savedBanner;
+        return bannerRepository.save(banner);
     }
 
     @Override
     public Banner getBannerById(String bannerId) {
 
-        Banner banner = bannerRepository.findById(bannerId)
+        return bannerRepository.findById(bannerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Banner is not exists with given id : " + bannerId));
-
-        return banner;
     }
 
     @Override
     public List<Banner> getAllBanners() {
 
-        List <Banner> banners = bannerRepository.findAll();
-        return banners;
+        return bannerRepository.findAll();
     }
 
     @Override
@@ -46,9 +41,7 @@ public class BannerServiceImpl implements BannerService {
                 () -> new ResourceNotFoundException("Banner is not exists with given id: " + bannerId)
         );
 
-        Banner updatedUserObj = bannerRepository.save(updatedBanner);
-
-        return updatedUserObj;
+        return bannerRepository.save(updatedBanner);
     }
 
     @Override

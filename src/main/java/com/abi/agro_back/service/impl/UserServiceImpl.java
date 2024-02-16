@@ -18,25 +18,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
 
-        User savedUser =userRepository.save(user);
-
-        return savedUser;
+        return userRepository.save(user);
     }
 
     @Override
     public User getUserById(String userId) {
 
-        User user = userRepository.findById(userId)
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User is not exists with given id : " + userId));
-
-        return user;
     }
 
     @Override
     public List<User> getAllUsers() {
 
-        List <User> users = userRepository.findAll();
-        return users;
+        return userRepository.findAll();
     }
 
     @Override
@@ -51,11 +46,9 @@ public class UserServiceImpl implements UserService {
         user.setPhone(updatedUser.getPhone());
         user.setEmail(updatedUser.getEmail());
         user.setPassword(updatedUser.getPassword());
-        user.setUsername(updatedUser.getUsername());
+//        user.setUsername(updatedUser.getUsername());
 
-        User updatedUserObj = userRepository.save(user);
-
-        return updatedUserObj;
+        return userRepository.save(user);
     }
 
     @Override
@@ -65,6 +58,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User is not exists with given id : " + userId));
 
-        userRepository.deleteById(userId);
+       userRepository.deleteById(userId);
     }
 }

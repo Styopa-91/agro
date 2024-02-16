@@ -18,9 +18,7 @@ public class PageServiceImpl implements PageService {
     @Override
     public Page createPage(Page page) {
 
-        Page savedPage =pageRepository.save(page);
-
-        return savedPage;
+        return pageRepository.save(page);
     }
 
     @Override
@@ -35,8 +33,7 @@ public class PageServiceImpl implements PageService {
     @Override
     public List<Page> getAllPages() {
 
-        List <Page> pages = pageRepository.findAll();
-        return pages;
+        return pageRepository.findAll();
     }
 
     @Override
@@ -46,9 +43,7 @@ public class PageServiceImpl implements PageService {
                 () -> new ResourceNotFoundException("Page is not exists with given id: " + pageId)
         );
 
-        Page updatedUserObj = pageRepository.save(updatedPage);
-
-        return updatedUserObj;
+        return pageRepository.save(updatedPage);
     }
 
     @Override

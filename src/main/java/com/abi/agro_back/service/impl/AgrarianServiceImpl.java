@@ -18,25 +18,20 @@ public class AgrarianServiceImpl implements AgrarianService {
     @Override
     public Agrarian createAgrarian(Agrarian agrarian) {
 
-        Agrarian savedAgrarian =agrarianRepository.save(agrarian);
-
-        return savedAgrarian;
+        return agrarianRepository.save(agrarian);
     }
 
     @Override
     public Agrarian getAgrarianById(String agrarianId) {
 
-        Agrarian agrarian = agrarianRepository.findById(agrarianId)
+        return agrarianRepository.findById(agrarianId)
                 .orElseThrow(() -> new ResourceNotFoundException("Agrarian is not exists with given id : " + agrarianId));
-
-        return agrarian;
     }
 
     @Override
     public List<Agrarian> getAllAgrarians() {
 
-        List <Agrarian> agrarians = agrarianRepository.findAll();
-        return agrarians;
+        return agrarianRepository.findAll();
     }
 
     @Override
@@ -46,9 +41,7 @@ public class AgrarianServiceImpl implements AgrarianService {
                 () -> new ResourceNotFoundException("Agrarian is not exists with given id: " + agrarianId)
         );
 
-        Agrarian updatedUserObj = agrarianRepository.save(updatedAgrarian);
-
-        return updatedUserObj;
+        return agrarianRepository.save(updatedAgrarian);
     }
 
     @Override

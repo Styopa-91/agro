@@ -55,7 +55,6 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully!");
     }
 
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {

@@ -18,25 +18,20 @@ public class ImagePageServiceImpl implements ImagePageService {
     @Override
     public ImagePage createImagePage(ImagePage imagePage) {
 
-        ImagePage savedImagePage =imagePageRepository.save(imagePage);
-
-        return savedImagePage;
+        return imagePageRepository.save(imagePage);
     }
 
     @Override
     public ImagePage getImagePageById(String imagePageId) {
 
-        ImagePage imagePage = imagePageRepository.findById(imagePageId)
+        return imagePageRepository.findById(imagePageId)
                 .orElseThrow(() -> new ResourceNotFoundException("ImagePage is not exists with given id : " + imagePageId));
-
-        return imagePage;
     }
 
     @Override
     public List<ImagePage> getAllImagePages() {
 
-        List <ImagePage> imagePages = imagePageRepository.findAll();
-        return imagePages;
+        return imagePageRepository.findAll();
     }
 
     @Override
@@ -46,9 +41,7 @@ public class ImagePageServiceImpl implements ImagePageService {
                 () -> new ResourceNotFoundException("ImagePage is not exists with given id: " + imagePageId)
         );
 
-        ImagePage updatedImagePageObj = imagePageRepository.save(updatedImagePage);
-
-        return updatedImagePageObj;
+        return imagePageRepository.save(updatedImagePage);
     }
 
     @Override

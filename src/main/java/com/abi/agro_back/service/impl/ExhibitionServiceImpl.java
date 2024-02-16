@@ -18,25 +18,20 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     @Override
     public Exhibition createExhibition(Exhibition exhibition) {
 
-        Exhibition savedExhibition =exhibitionRepository.save(exhibition);
-
-        return savedExhibition;
+        return exhibitionRepository.save(exhibition);
     }
 
     @Override
     public Exhibition getExhibitionById(String exhibitionId) {
 
-        Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
+        return exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Exhibition is not exists with given id : " + exhibitionId));
-
-        return exhibition;
     }
 
     @Override
     public List<Exhibition> getAllExhibitions() {
 
-        List <Exhibition> exhibitions = exhibitionRepository.findAll();
-        return exhibitions;
+        return exhibitionRepository.findAll();
     }
 
     @Override
@@ -46,9 +41,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
                 () -> new ResourceNotFoundException("Exhibition is not exists with given id: " + exhibitionId)
         );
 
-        Exhibition updatedUserObj = exhibitionRepository.save(updatedExhibition);
-
-        return updatedUserObj;
+        return exhibitionRepository.save(updatedExhibition);
     }
 
     @Override
