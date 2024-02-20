@@ -4,6 +4,7 @@ import com.abi.agro_back.collection.Exhibition;
 import com.abi.agro_back.service.ExhibitionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,19 @@ public class ExhibitionController {
         exhibitionService.deleteExhibition(id);
         return ResponseEntity.ok("Exhibition deleted successfully!");
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Exhibition>> getExhibitionsByDate(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  Date start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  Date end) {
+        List<Exhibition> exhibitions = exhibitionService.getExhibitionsByDate(start, end);
+        return ResponseEntity.ok(exhibitions);
+    }
+    @GetMapping("/archive")
+        public ResponseEntity<List<Exhibition>> getExhibitionsArchive() {
+            List<Exhibition> exhibitions = exhibitionService.getExhibitionsArchive();
+            return ResponseEntity.ok(exhibitions);
+        }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

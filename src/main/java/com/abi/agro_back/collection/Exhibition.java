@@ -6,8 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -26,7 +27,7 @@ public class Exhibition {
 
     private String image;
 
-    private int phone;
+    private String phone;
 
     private String email;
 
@@ -36,8 +37,10 @@ public class Exhibition {
 
     private String website;
 
-    private LocalDateTime startDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date startDate;
 
-    private LocalDateTime endDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date endDate;
 
 }

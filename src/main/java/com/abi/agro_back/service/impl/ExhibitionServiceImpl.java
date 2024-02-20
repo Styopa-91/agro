@@ -7,6 +7,7 @@ import com.abi.agro_back.service.ExhibitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -52,5 +53,19 @@ public class ExhibitionServiceImpl implements ExhibitionService {
                         new ResourceNotFoundException("Exhibition is not exists with given id : " + exhibitionId));
 
         exhibitionRepository.deleteById(exhibitionId);
+    }
+
+    @Override
+    public List<Exhibition> getExhibitionsByDate(Date start, Date end) {
+        start.setHours(0);
+        end.setHours(24);
+        return exhibitionRepository.findExhibitionsByStartDateIsBetweenOrEndDateIsBetweenOrderByStartDate(start, end, start, end);
+    }
+
+    @Override
+    public List<Exhibition> getExhibitionsArchive() {
+        Date now = new Date();
+        now.setHours(0);
+        return exhibitionRepository.findExhibitionsByEndDateBeforeOrderByEndDateDesc(now);
     }
 }

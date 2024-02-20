@@ -2,6 +2,7 @@ package com.abi.agro_back.service;
 
 import com.abi.agro_back.collection.Exhibition;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ExhibitionService {
@@ -15,4 +16,7 @@ public interface ExhibitionService {
 
     void deleteExhibition(String  exhibitionId);
 
+    List<Exhibition> getExhibitionsByDate(Date start, Date end);
+
+    List<Exhibition> getExhibitionsArchive();
 }
