@@ -15,4 +15,13 @@ public interface UserService {
 
     void deleteUser(String  userId);
 
+    User findUserByEmail(String userEmail);
+
+    void createPasswordResetTokenForUser(User user, String token);
+
+    String validatePasswordResetToken(String token);
+
+    User getUserByPasswordResetToken(String token);
+
+    void changeUserPassword(User user, String password);
 }

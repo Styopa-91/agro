@@ -25,6 +25,8 @@ public class SecurityConfiguration {
             "/api/auth/authenticate",
             "/swagger-ui/**",
             "/v3/**",
+            "/api/users/resetPassword/**",
+            "/api/users/savePassword",
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -43,6 +45,7 @@ public class SecurityConfiguration {
 
                                 .requestMatchers(GET, "/api/users").hasAuthority(ADMIN.name())
                                 .requestMatchers(POST, "/api/users").hasAnyAuthority(ADMIN.name())
+//                                .requestMatchers(POST, "/api/users/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/users/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/users/**").hasAuthority(ADMIN.name())
 

@@ -1,8 +1,12 @@
 package com.abi.agro_back.controller;
 
+import com.abi.agro_back.auth.PasswordDto;
 import com.abi.agro_back.collection.User;
+import com.abi.agro_back.config.MailSender;
+import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +25,9 @@ import java.util.Map;
 @RequestMapping("/api/users")
 @Tag(name = "User", description = "the User Endpoint")
 public class UserController {
+
+    @Autowired
+    private MailSender mailSender;
 
     @Autowired
     private UserService userService;
@@ -53,6 +61,39 @@ public class UserController {
     public ResponseEntity<String> deleteUserById(@PathVariable("id") String  id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully!");
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword(HttpServletRequest request,
+                                         @RequestParam("email") String userEmail) throws IOException {
+        User user = userService.findUserByEmail(userEmail);
+        if (user == null) {
+            throw new ResourceNotFoundException(user.getEmail() + " not found");
+        }
+        String token = java.util.UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+        System.out.printf(request.getContextPath());
+        mailSender.sendResetEmail(token, user.getEmail());
+
+        return ResponseEntity.ok("Link for reset password sent to email");
+    }
+
+    @PostMapping("/savePassword")
+    public ResponseEntity<String> savePassword(@RequestBody PasswordDto passwordDto) {
+
+        String result = userService.validatePasswordResetToken(passwordDto.getToken());
+
+        if(result != null) {
+            return ResponseEntity.ok("Password saved");
+        }
+
+        User user = userService.getUserByPasswordResetToken(passwordDto.getToken());
+        if(user != null) {
+            userService.changeUserPassword(user, passwordDto.getNewPassword());
+            return ResponseEntity.ok("Password Updated");
+        } else {
+            return ResponseEntity.ok("Password have not updated");
+        }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

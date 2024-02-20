@@ -3,6 +3,7 @@ package com.abi.agro_back.auth;
 import com.abi.agro_back.collection.Role;
 import com.abi.agro_back.collection.User;
 import com.abi.agro_back.config.JwtService;
+import com.abi.agro_back.config.MailSender;
 import com.abi.agro_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final MailSender mailSender;
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -29,7 +31,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         repository.save(user);
-//todo send login and password to user by email
+        mailSender.sendEmail(request.getEmail(), request.getPassword());
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
