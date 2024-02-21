@@ -19,4 +19,5 @@ public interface BannerService {
 
     Page<Banner> findAllByPage(Pageable pageable);
 
+    List<Banner> getBannersByKeySearch(String key, String oblast);
 }

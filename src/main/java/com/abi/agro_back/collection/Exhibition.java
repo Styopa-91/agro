@@ -16,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Document("exhibitions")
 public class Exhibition {
+
     @Id
     private String id;
 
@@ -30,6 +31,8 @@ public class Exhibition {
     private String phone;
 
     private String email;
+
+    private String oblast;
 
     private String gallery_photos;
 

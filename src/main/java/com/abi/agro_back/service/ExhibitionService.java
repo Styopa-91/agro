@@ -23,4 +23,6 @@ public interface ExhibitionService {
     List<Exhibition> getExhibitionsArchive();
 
     Page<Exhibition> findAllByPage(Pageable pageable);
+
+    List<Exhibition> getExhibitionsByKeySearch(String key, String oblast);
 }

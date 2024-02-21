@@ -64,8 +64,8 @@ public class ExhibitionController {
 
     @GetMapping("/page")
     public Page<Exhibition> findAllByPage(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "2") int sizePerPage,
-                                          @RequestParam(defaultValue = "ID") SortField sortField,
+                                          @RequestParam(defaultValue = "20") int sizePerPage,
+                                          @RequestParam(defaultValue = "START_DATE") SortField sortField,
                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
         Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
         return exhibitionService.findAllByPage(pageable);
@@ -83,6 +83,12 @@ public class ExhibitionController {
             List<Exhibition> exhibitions = exhibitionService.getExhibitionsArchive();
             return ResponseEntity.ok(exhibitions);
         }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Exhibition>> getExhibitionsByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
+        List<Exhibition> exhibitions = exhibitionService.getExhibitionsByKeySearch(key, oblast);
+        return ResponseEntity.ok(exhibitions);
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

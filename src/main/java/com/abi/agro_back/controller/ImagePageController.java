@@ -62,12 +62,19 @@ public class ImagePageController {
 
     @GetMapping("/page")
     public Page<ImagePage> findAllByPage(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "2") int sizePerPage,
-                                          @RequestParam(defaultValue = "ID") SortField sortField,
+                                          @RequestParam(defaultValue = "20") int sizePerPage,
+                                          @RequestParam(defaultValue = "TITLE") SortField sortField,
                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
         Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
         return imagePageService.findAllByPage(pageable);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ImagePage>> getExhibitionsByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
+        List<ImagePage> imagePages = imagePageService.getExhibitionsByKeySearch(key, oblast);
+        return ResponseEntity.ok(imagePages);
+    }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

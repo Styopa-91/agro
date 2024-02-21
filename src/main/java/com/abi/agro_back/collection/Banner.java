@@ -17,7 +17,7 @@ import java.util.List;
 @Document("banners")
 public class Banner {
     @Id
-    private String  id;
+    private String id;
 
     private String title;
 
@@ -25,9 +25,10 @@ public class Banner {
 
     private String image;
 
+    private String oblast;
+
     private LocalDate createdAt;
 
-//    @DBRef
-    private List<KeyWord> keyWords;
+    private List<String> keyWords;
 
 }

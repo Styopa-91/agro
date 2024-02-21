@@ -60,4 +60,13 @@ public class ImagePageServiceImpl implements ImagePageService {
     public Page<ImagePage> findAllByPage(Pageable pageable) {
         return imagePageRepository.findAll(pageable);
     }
+
+    @Override
+    public List<ImagePage> getExhibitionsByKeySearch(String key, String oblast) {
+        if (!oblast.isEmpty()) {
+            return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(key, oblast);
+        } else {
+            return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCase(key);
+        }
+    }
 }

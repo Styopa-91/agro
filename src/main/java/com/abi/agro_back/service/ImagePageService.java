@@ -19,4 +19,5 @@ public interface ImagePageService {
 
     Page<ImagePage> findAllByPage(Pageable pageable);
 
+    List<ImagePage> getExhibitionsByKeySearch(String key, String oblast);
 }

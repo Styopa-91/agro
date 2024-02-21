@@ -60,4 +60,13 @@ public class BannerServiceImpl implements BannerService {
     public Page<Banner> findAllByPage(Pageable pageable) {
         return bannerRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Banner> getBannersByKeySearch(String key, String oblast) {
+        if (!oblast.isEmpty()) {
+            return bannerRepository.findBannersByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(key, oblast);
+        } else {
+            return bannerRepository.findBannersByKeyWordsIsContainingIgnoreCase(key);
+        }
+    }
 }

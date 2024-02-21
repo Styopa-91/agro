@@ -75,4 +75,13 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     public Page<Exhibition> findAllByPage(Pageable pageable) {
         return exhibitionRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Exhibition> getExhibitionsByKeySearch(String key, String oblast) {
+        if (!oblast.isEmpty()) {
+            return exhibitionRepository.findExhibitionsByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(key, oblast);
+        } else {
+            return exhibitionRepository.findExhibitionsByKeyWordsIsContainingIgnoreCase(key);
+        }
+    }
 }

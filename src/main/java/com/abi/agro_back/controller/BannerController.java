@@ -62,11 +62,17 @@ public class BannerController {
 
     @GetMapping("/page")
     public Page<Banner> findAllByPage(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "2") int sizePerPage,
-                                          @RequestParam(defaultValue = "ID") SortField sortField,
+                                          @RequestParam(defaultValue = "20") int sizePerPage,
+                                          @RequestParam(defaultValue = "CREATED_AT") SortField sortField,
                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
         Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
         return bannerService.findAllByPage(pageable);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Banner>> getBannersByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
+        List<Banner> banners = bannerService.getBannersByKeySearch(key, oblast);
+        return ResponseEntity.ok(banners);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

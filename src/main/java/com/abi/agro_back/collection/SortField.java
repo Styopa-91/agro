@@ -7,8 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SortField {
     ID("id"),
-    NAME("name"),
-    START_DATE("startDate");
+    TITLE("title"),
+    START_DATE("startDate"),
+    CREATED_AT("createdAt");
 
     private final String databaseFieldName;
 }
