@@ -1,9 +1,14 @@
 package com.abi.agro_back.controller;
 
 import com.abi.agro_back.collection.Exhibition;
+import com.abi.agro_back.collection.SortField;
 import com.abi.agro_back.service.ExhibitionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +60,15 @@ public class ExhibitionController {
     public ResponseEntity<String> deleteExhibitionById(@PathVariable("id") String  id) {
         exhibitionService.deleteExhibition(id);
         return ResponseEntity.ok("Exhibition deleted successfully!");
+    }
+
+    @GetMapping("/page")
+    public Page<Exhibition> findAllByPage(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "2") int sizePerPage,
+                                          @RequestParam(defaultValue = "ID") SortField sortField,
+                                          @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
+        Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
+        return exhibitionService.findAllByPage(pageable);
     }
 
     @GetMapping("/filter")

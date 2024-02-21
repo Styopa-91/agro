@@ -5,6 +5,8 @@ import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.ExhibitionRepository;
 import com.abi.agro_back.service.ExhibitionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -67,5 +69,10 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         Date now = new Date();
         now.setHours(0);
         return exhibitionRepository.findExhibitionsByEndDateBeforeOrderByEndDateDesc(now);
+    }
+
+    @Override
+    public Page<Exhibition> findAllByPage(Pageable pageable) {
+        return exhibitionRepository.findAll(pageable);
     }
 }

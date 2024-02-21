@@ -5,6 +5,8 @@ import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.ImagePageRepository;
 import com.abi.agro_back.service.ImagePageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,5 +54,10 @@ public class ImagePageServiceImpl implements ImagePageService {
                         new ResourceNotFoundException("ImagePage is not exists with given id : " + imagePageId));
 
         imagePageRepository.deleteById(imagePageId);
+    }
+
+    @Override
+    public Page<ImagePage> findAllByPage(Pageable pageable) {
+        return imagePageRepository.findAll(pageable);
     }
 }

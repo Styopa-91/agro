@@ -5,6 +5,8 @@ import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.BannerRepository;
 import com.abi.agro_back.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,5 +54,10 @@ public class BannerServiceImpl implements BannerService {
                         new ResourceNotFoundException("Banner is not exists with given id : " + bannerId));
 
         bannerRepository.deleteById(bannerId);
+    }
+
+    @Override
+    public Page<Banner> findAllByPage(Pageable pageable) {
+        return bannerRepository.findAll(pageable);
     }
 }
