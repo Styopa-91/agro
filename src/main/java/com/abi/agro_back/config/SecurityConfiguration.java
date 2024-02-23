@@ -21,15 +21,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
-//            "/api/auth/register",
-            "/api/exhibitions",
-            "/api/imagePages",
-            "/api/imagePages/**",
-            "/api/products",
-            "/api/products/**",
-            "/api/exhibitions/**",
-            "/api/banners/**",
-            "/api/banners",
 
             "/api/auth/authenticate",
             "/swagger-ui/**",
@@ -54,7 +45,7 @@ public class SecurityConfiguration {
 
                                 .requestMatchers(GET, "/api/users").hasAuthority(ADMIN.name())
                                 .requestMatchers(POST, "/api/users").hasAnyAuthority(ADMIN.name())
-//                                .requestMatchers(POST, "/api/users/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(POST, "/api/users/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/users/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/users/**").hasAuthority(ADMIN.name())
 

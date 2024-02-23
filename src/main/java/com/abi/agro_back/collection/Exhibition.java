@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -34,11 +35,13 @@ public class Exhibition {
 
     private String oblast;
 
-    private String gallery_photos;
+    private List<Photo> gallery_photos;
 
     private String address;
 
     private String website;
+
+    private List<String> keyWords;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date startDate;

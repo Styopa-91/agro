@@ -1,7 +1,9 @@
 package com.abi.agro_back.controller;
 
 import com.abi.agro_back.collection.Exhibition;
+import com.abi.agro_back.collection.Photo;
 import com.abi.agro_back.collection.SortField;
+import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.service.ExhibitionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 @CrossOrigin("*")
 @RestController
@@ -31,10 +33,44 @@ public class ExhibitionController {
     @Autowired
     private ExhibitionService exhibitionService;
 
-    @PostMapping
-    public ResponseEntity<Exhibition> createExhibition(@Validated @RequestBody Exhibition exhibition) {
+    @Autowired
+    private StorageService storageService;
+    @PostMapping(consumes = { "multipart/form-data" })
+    public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos, @Validated @RequestPart("exhibition") Exhibition exhibition) throws IOException {
+        exhibition.setGallery_photos(new ArrayList<>());
+        for (MultipartFile f : photos) {
+            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+            URL url = storageService.uploadPhoto(f, key);
+            Photo photo = new Photo(key, url);
+            exhibition.getGallery_photos().add(photo);
+        }
+
         Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
         return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/photo/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<Exhibition> addImagesById(@RequestPart("photos") List<MultipartFile> photos, @PathVariable("id") String id) throws IOException {
+        Exhibition exhibition = exhibitionService.getExhibitionById(id);
+        for (MultipartFile f : photos) {
+            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+            URL url = storageService.uploadPhoto(f, key);
+            Photo photo = new Photo(key, url);
+            exhibition.getGallery_photos().add(photo);
+        }
+
+        Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
+        return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/photo")
+    public ResponseEntity<String> deletePhotoByKey(@RequestParam("key") String  key, @RequestParam(value = "id") String  id) {
+        storageService.deletePhoto(key);
+        Exhibition exhibition = exhibitionService.getExhibitionById(id);
+        exhibition.getGallery_photos().removeIf(p -> p.getKey().equals(key));
+
+        exhibitionService.updateExhibition(exhibition.getId(), exhibition);
+        return ResponseEntity.ok("Photo deleted successfully!");
     }
 
     @GetMapping("{id}")

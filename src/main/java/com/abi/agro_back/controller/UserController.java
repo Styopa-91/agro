@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,7 @@ public class UserController {
 
     @PostMapping("/resetPassword")
     public ResponseEntity<String> resetPassword(HttpServletRequest request,
-                                         @RequestParam("email") String userEmail) throws IOException {
+                                         @RequestParam("email") String userEmail) {
         User user = userService.findUserByEmail(userEmail);
         if (user == null) {
             throw new ResourceNotFoundException(user.getEmail() + " not found");
