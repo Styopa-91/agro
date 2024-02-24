@@ -43,12 +43,12 @@ public class StorageService {
 //        space.createBucket("testagro");
     }
 
-//    public List<String> getImageNames() {
-//        ListObjectsV2Result result = space.listObjectsV2(bucket);
-//        List<S3ObjectSummary> objects = result.getObjectSummaries();
-//        return objects.stream()
-//                .map(S3ObjectSummary::getKey).collect(Collectors.toList());
-//    }
+    public List<String> getImageNames() {
+        ListObjectsV2Result result = space.listObjectsV2(bucket);
+        List<S3ObjectSummary> objects = result.getObjectSummaries();
+        return objects.stream()
+                .map(S3ObjectSummary::getKey).collect(Collectors.toList());
+    }
 
     public URL uploadPhoto(MultipartFile file, String key) throws IOException {
 
