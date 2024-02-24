@@ -70,8 +70,8 @@ public class ImagePageController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ImagePage>> getExhibitionsByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
-        List<ImagePage> imagePages = imagePageService.getExhibitionsByKeySearch(key, oblast);
+    public ResponseEntity<List<ImagePage>> getImagePagesByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
+        List<ImagePage> imagePages = imagePageService.getImagePagesByKeySearch(key, oblast);
         return ResponseEntity.ok(imagePages);
     }
 

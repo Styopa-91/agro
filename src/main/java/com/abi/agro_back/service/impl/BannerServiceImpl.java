@@ -42,7 +42,7 @@ public class BannerServiceImpl implements BannerService {
         Banner banner = bannerRepository.findById(bannerId).orElseThrow(
                 () -> new ResourceNotFoundException("Banner is not exists with given id: " + bannerId)
         );
-
+        updatedBanner.setId(banner.getId());
         return bannerRepository.save(updatedBanner);
     }
 

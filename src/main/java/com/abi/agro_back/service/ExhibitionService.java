@@ -16,7 +16,7 @@ public interface ExhibitionService {
 
     Exhibition updateExhibition(String exhibitionId, Exhibition updatedExhibition);
 
-    void deleteExhibition(String  exhibitionId);
+    void deleteExhibitionById(String  exhibitionId);
 
     List<Exhibition> getExhibitionsByDate(Date start, Date end);
 

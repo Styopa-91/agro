@@ -40,6 +40,7 @@ public class AgrarianServiceImpl implements AgrarianService {
         Agrarian agrarian = agrarianRepository.findById(agrarianId).orElseThrow(
                 () -> new ResourceNotFoundException("Agrarian is not exists with given id: " + agrarianId)
         );
+        updatedAgrarian.setId(agrarian.getId());
 
         return agrarianRepository.save(updatedAgrarian);
     }

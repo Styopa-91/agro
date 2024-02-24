@@ -1,6 +1,8 @@
 package com.abi.agro_back.service.impl;
 
 import com.abi.agro_back.collection.Exhibition;
+import com.abi.agro_back.collection.Photo;
+import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.ExhibitionRepository;
 import com.abi.agro_back.service.ExhibitionService;
@@ -17,6 +19,9 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Autowired
     private ExhibitionRepository exhibitionRepository;
+
+    @Autowired
+    private StorageService storageService;
 
     @Override
     public Exhibition createExhibition(Exhibition exhibition) {
@@ -43,18 +48,24 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId).orElseThrow(
                 () -> new ResourceNotFoundException("Exhibition is not exists with given id: " + exhibitionId)
         );
+        updatedExhibition.setId(exhibition.getId());
 
         return exhibitionRepository.save(updatedExhibition);
     }
 
     @Override
-    public void deleteExhibition(String exhibitionId) {
+    public void deleteExhibitionById(String exhibitionId) {
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Exhibition is not exists with given id : " + exhibitionId));
-
+        storageService.deletePhoto(exhibition.getImage().getKey());
+        storageService.deletePhoto(exhibition.getLogo().getKey());
+        for (Photo photo : exhibition.getGallery_photos()){
+            storageService.deletePhoto(photo.getKey());
+        }
         exhibitionRepository.deleteById(exhibitionId);
+
     }
 
     @Override

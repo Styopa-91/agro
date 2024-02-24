@@ -36,7 +36,7 @@ public class ExhibitionController {
     @Autowired
     private StorageService storageService;
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos, @Validated @RequestPart("exhibition") Exhibition exhibition) throws IOException {
+    public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos, @RequestPart("image") MultipartFile image, @RequestPart("logo") MultipartFile logo, @Validated @RequestPart("exhibition") Exhibition exhibition) throws IOException {
         exhibition.setGallery_photos(new ArrayList<>());
         for (MultipartFile f : photos) {
             String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
@@ -44,6 +44,16 @@ public class ExhibitionController {
             Photo photo = new Photo(key, url);
             exhibition.getGallery_photos().add(photo);
         }
+
+        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL imageUrl = storageService.uploadPhoto(image, imageKey);
+        Photo imagePhoto = new Photo(imageKey, imageUrl);
+        exhibition.setImage(imagePhoto);
+
+        String logoKey = logo.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL logoUrl = storageService.uploadPhoto(logo, logoKey);
+        Photo logoPhoto = new Photo(logoKey, logoUrl);
+        exhibition.setLogo(logoPhoto);
 
         Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
         return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
@@ -94,7 +104,7 @@ public class ExhibitionController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteExhibitionById(@PathVariable("id") String  id) {
-        exhibitionService.deleteExhibition(id);
+        exhibitionService.deleteExhibitionById(id);
         return ResponseEntity.ok("Exhibition deleted successfully!");
     }
 

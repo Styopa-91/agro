@@ -3,6 +3,7 @@ package com.abi.agro_back.service.impl;
 import com.abi.agro_back.collection.ImagePage;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.ImagePageRepository;
+import com.abi.agro_back.repository.ProductRepository;
 import com.abi.agro_back.service.ImagePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,9 @@ public class ImagePageServiceImpl implements ImagePageService {
 
     @Autowired
     private ImagePageRepository imagePageRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Override
     public ImagePage createImagePage(ImagePage imagePage) {
@@ -42,6 +46,7 @@ public class ImagePageServiceImpl implements ImagePageService {
         ImagePage imagePage = imagePageRepository.findById(imagePageId).orElseThrow(
                 () -> new ResourceNotFoundException("ImagePage is not exists with given id: " + imagePageId)
         );
+        updatedImagePage.setId(imagePage.getId());
 
         return imagePageRepository.save(updatedImagePage);
     }
@@ -54,6 +59,7 @@ public class ImagePageServiceImpl implements ImagePageService {
                         new ResourceNotFoundException("ImagePage is not exists with given id : " + imagePageId));
 
         imagePageRepository.deleteById(imagePageId);
+        productRepository.deleteAllByImagePageId(imagePageId);
     }
 
     @Override
@@ -62,7 +68,7 @@ public class ImagePageServiceImpl implements ImagePageService {
     }
 
     @Override
-    public List<ImagePage> getExhibitionsByKeySearch(String key, String oblast) {
+    public List<ImagePage> getImagePagesByKeySearch(String key, String oblast) {
         if (!oblast.isEmpty()) {
             return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(key, oblast);
         } else {

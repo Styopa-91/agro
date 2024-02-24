@@ -27,7 +27,9 @@ public class Exhibition {
 
     private String content;
 
-    private String image;
+    private Photo logo;
+
+    private Photo image;
 
     private String phone;
 

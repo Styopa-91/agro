@@ -42,6 +42,7 @@ public class PageServiceImpl implements PageService {
         Page page = pageRepository.findById(pageId).orElseThrow(
                 () -> new ResourceNotFoundException("Page is not exists with given id: " + pageId)
         );
+        updatedPage.setId(page.getId());
 
         return pageRepository.save(updatedPage);
     }

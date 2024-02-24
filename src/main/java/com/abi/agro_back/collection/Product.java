@@ -26,7 +26,6 @@ public class Product {
 
     private String image;
 
-    @DBRef
-    private ImagePage imagePage;
+    private String imagePageId;
 
 }

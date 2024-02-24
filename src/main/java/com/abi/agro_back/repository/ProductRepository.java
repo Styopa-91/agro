@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findProductsByImagePageId(String id);
+
+    void deleteAllByImagePageId(String id);
 }
