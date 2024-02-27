@@ -6,6 +6,7 @@ import com.abi.agro_back.collection.SortField;
 import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.service.ExhibitionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +37,10 @@ public class ExhibitionController {
     @Autowired
     private StorageService storageService;
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos, @RequestPart("image") MultipartFile image, @RequestPart("logo") MultipartFile logo, @Validated @RequestPart("exhibition") Exhibition exhibition) throws IOException {
+    public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos,
+                                                       @RequestPart("image") MultipartFile image,
+                                                       @RequestPart("logo") MultipartFile logo,
+                                                       @Valid @RequestPart("exhibition") Exhibition exhibition) throws IOException {
         exhibition.setGallery_photos(new ArrayList<>());
         for (MultipartFile f : photos) {
             String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
@@ -59,29 +63,62 @@ public class ExhibitionController {
         return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/photo/{id}", consumes = { "multipart/form-data" })
-    public ResponseEntity<Exhibition> addImagesById(@RequestPart("photos") List<MultipartFile> photos, @PathVariable("id") String id) throws IOException {
-        Exhibition exhibition = exhibitionService.getExhibitionById(id);
-        for (MultipartFile f : photos) {
-            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
-            URL url = storageService.uploadPhoto(f, key);
-            Photo photo = new Photo(key, url);
-            exhibition.getGallery_photos().add(photo);
-        }
+//    @PostMapping(path = "/photo/image/{id}", consumes = { "multipart/form-data" })
+//    public ResponseEntity<Exhibition> updateImageById(@RequestPart("image") MultipartFile image,
+//                                                             @PathVariable("id") String id) throws IOException {
+//        Exhibition exhibition = exhibitionService.getExhibitionById(id);
+//        storageService.deletePhoto(exhibition.getImage().getKey());
+//
+//        String key = image.getOriginalFilename() + "" + System.currentTimeMillis();
+//        URL url = storageService.uploadPhoto(image, key);
+//        Photo photo = new Photo(key, url);
+//        exhibition.setImage(photo);
+//
+//        Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
+//        return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
+//    }
 
-        Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
-        return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
-    }
 
-    @DeleteMapping("/photo")
-    public ResponseEntity<String> deletePhotoByKey(@RequestParam("key") String  key, @RequestParam(value = "id") String  id) {
-        storageService.deletePhoto(key);
-        Exhibition exhibition = exhibitionService.getExhibitionById(id);
-        exhibition.getGallery_photos().removeIf(p -> p.getKey().equals(key));
+//    @PostMapping(path = "/photo/logo/{id}", consumes = { "multipart/form-data" })
+//    public ResponseEntity<Exhibition> updateLogoById(@RequestPart("logo") MultipartFile logo,
+//                                                      @PathVariable("id") String id) throws IOException {
+//        Exhibition exhibition = exhibitionService.getExhibitionById(id);
+//
+//        String key = logo.getOriginalFilename() + "" + System.currentTimeMillis();
+//        URL url = storageService.uploadPhoto(logo, key);
+//        Photo photo = new Photo(key, url);
+//        exhibition.setLogo(photo);
+//
+//        Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
+//        storageService.deletePhoto(exhibition.getLogo().getKey());
+//
+//        return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
+//    }
 
-        exhibitionService.updateExhibition(exhibition.getId(), exhibition);
-        return ResponseEntity.ok("Photo deleted successfully!");
-    }
+//    @PostMapping(path = "/photo/gallery/{id}", consumes = { "multipart/form-data" })
+//    public ResponseEntity<Exhibition> addPhotoToGalleryById(@RequestPart("photos") List<MultipartFile> photos,
+//                                                    @PathVariable("id") String id) throws IOException {
+//        Exhibition exhibition = exhibitionService.getExhibitionById(id);
+//        for (MultipartFile f : photos) {
+//            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+//            URL url = storageService.uploadPhoto(f, key);
+//            Photo photo = new Photo(key, url);
+//            exhibition.getGallery_photos().add(photo);
+//        }
+//
+//        Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
+//        return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
+//    }
+
+//    @DeleteMapping("/photo/gallery")
+//    public ResponseEntity<String> deletePhotoFromGalleryByKey(@RequestParam("key") String  key, @RequestParam(value = "id") String  id) {
+//        storageService.deletePhoto(key);
+//        Exhibition exhibition = exhibitionService.getExhibitionById(id);
+//        exhibition.getGallery_photos().removeIf(p -> p.getKey().equals(key));
+//
+//        exhibitionService.updateExhibition(exhibition.getId(), exhibition);
+//        return ResponseEntity.ok("Photo deleted successfully!");
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<Exhibition> getExhibitionById(@PathVariable("id") String id) {
@@ -95,9 +132,9 @@ public class ExhibitionController {
         return ResponseEntity.ok(exhibitions);
     }
 
-    @PutMapping(value = "{id}")
+    @PatchMapping(value = "{id}")
     public ResponseEntity<Exhibition> updateExhibition(@PathVariable("id") String  exhibitionId,
-                                              @RequestBody Exhibition updatedExhibition) {
+                                              @RequestBody @Valid Exhibition updatedExhibition) {
         Exhibition exhibition = exhibitionService.updateExhibition(exhibitionId, updatedExhibition);
         return ResponseEntity.ok(exhibition);
     }

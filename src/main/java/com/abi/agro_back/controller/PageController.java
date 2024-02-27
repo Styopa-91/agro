@@ -3,11 +3,11 @@ package com.abi.agro_back.controller;
 import com.abi.agro_back.collection.Page;
 import com.abi.agro_back.service.PageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class PageController {
     private PageService pageService;
 
     @PostMapping
-    public ResponseEntity<Page> createPage(@Validated @RequestBody Page page) {
+    public ResponseEntity<Page> createPage(@RequestBody @Valid Page page) {
         Page savedPage = pageService.createPage(page);
         return new ResponseEntity<>(savedPage, HttpStatus.CREATED);
     }

@@ -1,32 +1,31 @@
 package com.abi.agro_back.collection;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("products")
-public class Product {
-
+@Document("notes")
+public class Note {
     @Id
-    private String  id;
+    String id;
 
-    @NotBlank(message = "title required")
-    private String title;
+    String agrarianId;
 
-    private String description;
+    String userId;
 
-    private int price;
+    String text;
 
-    private Photo image;
-
-    private String imagePageId;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
 }

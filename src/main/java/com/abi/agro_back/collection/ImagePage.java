@@ -24,7 +24,7 @@ public class ImagePage {
 
     private String phone;
 
-    private String image;
+    private Photo image;
 
     private String oblast;
 

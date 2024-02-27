@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.net.URL;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,6 +25,8 @@ public class Agrarian {
 
     private String phone;
 
+    private Photo image;
+
     private String email;
 
     private String address;
@@ -30,12 +35,18 @@ public class Agrarian {
 
     private String region;
 
+    private String oldRegion;
+
+    private boolean isPriority;
+
+    private URL redirect;
+
     private String EDRPOU;
 
     private String area;
 
     private String website;
 
-    private String prod_types;
+    private List<String> prod_types;
 
 }

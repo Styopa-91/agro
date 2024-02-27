@@ -4,6 +4,7 @@ import com.abi.agro_back.collection.Banner;
 import com.abi.agro_back.collection.SortField;
 import com.abi.agro_back.service.BannerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +30,7 @@ public class BannerController {
     private BannerService bannerService;
 
     @PostMapping
-    public ResponseEntity<Banner> createBanner(@Validated @RequestBody Banner banner) {
+    public ResponseEntity<Banner> createBanner(@Valid @RequestBody Banner banner) {
         Banner savedBanner = bannerService.createBanner(banner);
         return new ResponseEntity<>(savedBanner, HttpStatus.CREATED);
     }
@@ -49,7 +49,7 @@ public class BannerController {
 
     @PutMapping(value = "{id}")
     public ResponseEntity<Banner> updateBanner(@PathVariable("id") String  bannerId,
-                                              @RequestBody Banner updatedBanner) {
+                                              @RequestBody @Valid Banner updatedBanner) {
         Banner banner = bannerService.updateBanner(bannerId, updatedBanner);
         return ResponseEntity.ok(banner);
     }
