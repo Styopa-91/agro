@@ -1,6 +1,8 @@
 package com.abi.agro_back.service.impl;
 
 import com.abi.agro_back.collection.ImagePage;
+import com.abi.agro_back.collection.Photo;
+import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.ImagePageRepository;
 import com.abi.agro_back.repository.ProductRepository;
@@ -9,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @Service
@@ -20,9 +25,15 @@ public class ImagePageServiceImpl implements ImagePageService {
 
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    private StorageService storageService;
 
     @Override
-    public ImagePage createImagePage(ImagePage imagePage) {
+    public ImagePage createImagePage(MultipartFile image, ImagePage imagePage) throws IOException {
+        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL imageUrl = storageService.uploadPhoto(image, imageKey);
+        Photo imagePhoto = new Photo(imageKey, imageUrl);
+        imagePage.setImage(imagePhoto);
 
         return imagePageRepository.save(imagePage);
     }

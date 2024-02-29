@@ -26,27 +26,23 @@ public class RegisteringRequestController {
 
     @PostMapping
     public ResponseEntity<RegisteringRequest> createRegisteringRequest(@Validated @RequestBody RegisteringRequest registeringRequest) {
-        RegisteringRequest savedRegisteringRequest = registeringRequestService.createRegisteringRequest(registeringRequest);
-        return new ResponseEntity<>(savedRegisteringRequest, HttpStatus.CREATED);
+        return new ResponseEntity<>(registeringRequestService.createRegisteringRequest(registeringRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<RegisteringRequest> getRegisteringRequestById(@PathVariable("id") String id) {
-        RegisteringRequest registeringRequest = registeringRequestService.getRegisteringRequestById(id);
-        return ResponseEntity.ok(registeringRequest);
+        return ResponseEntity.ok(registeringRequestService.getRegisteringRequestById(id));
     }
 
     @GetMapping()
     public ResponseEntity<List<RegisteringRequest>> getAllRegisteringRequests() {
-        List<RegisteringRequest> registeringRequests = registeringRequestService.getAllRegisteringRequests();
-        return ResponseEntity.ok(registeringRequests);
+        return ResponseEntity.ok(registeringRequestService.getAllRegisteringRequests());
     }
 
     @PutMapping(value = "{id}")
     public ResponseEntity<RegisteringRequest> updateRegisteringRequest(@PathVariable("id") String  registeringRequestId,
                                               @RequestBody RegisteringRequest updatedRegisteringRequest) {
-        RegisteringRequest registeringRequest = registeringRequestService.updateRegisteringRequest(registeringRequestId, updatedRegisteringRequest);
-        return ResponseEntity.ok(registeringRequest);
+        return ResponseEntity.ok(registeringRequestService.updateRegisteringRequest(registeringRequestId, updatedRegisteringRequest));
     }
 
     @DeleteMapping("{id}")

@@ -10,7 +10,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,29 +26,26 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping
-    public ResponseEntity<Product> createProduct(@Validated @RequestBody Product product) {
-        Product savedProduct = productService.createProduct(product);
-        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+    @PostMapping(consumes = { "multipart/form-data" })
+    public ResponseEntity<Product> createProduct(@RequestPart ("image") MultipartFile image,
+                                                 @Validated @RequestPart Product product) throws IOException {
+        return new ResponseEntity<>(productService.createProduct(image, product), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") String id) {
-        Product product = productService.getProductById(id);
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping()
     public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PutMapping(value = "{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable("id") String  productId,
                                               @RequestBody Product updatedProduct) {
-        Product product = productService.updateProduct(productId, updatedProduct);
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(productService.updateProduct(productId, updatedProduct));
     }
 
     @DeleteMapping("{id}")
@@ -57,8 +56,7 @@ public class ProductController {
 
     @GetMapping("/image-page/{id}")
     public ResponseEntity<List<Product>> getProductsByImagePageId(@PathVariable("id") String id) {
-        List<Product> products = productService.getProductsByImagePageId(id);
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(productService.getProductsByImagePageId(id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

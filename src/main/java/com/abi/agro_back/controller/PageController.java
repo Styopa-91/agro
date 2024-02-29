@@ -26,27 +26,23 @@ public class PageController {
 
     @PostMapping
     public ResponseEntity<Page> createPage(@RequestBody @Valid Page page) {
-        Page savedPage = pageService.createPage(page);
-        return new ResponseEntity<>(savedPage, HttpStatus.CREATED);
+        return new ResponseEntity<>(pageService.createPage(page), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Page> getPageById(@PathVariable("id") String id) {
-        Page page = pageService.getPageById(id);
-        return ResponseEntity.ok(page);
+        return ResponseEntity.ok(pageService.getPageById(id));
     }
 
     @GetMapping()
     public ResponseEntity<List<Page>> getAllPages() {
-        List<Page> pages = pageService.getAllPages();
-        return ResponseEntity.ok(pages);
+        return ResponseEntity.ok(pageService.getAllPages());
     }
 
     @PutMapping(value = "{id}")
     public ResponseEntity<Page> updatePage(@PathVariable("id") String  pageId,
                                               @RequestBody Page updatedPage) {
-        Page page = pageService.updatePage(pageId, updatedPage);
-        return ResponseEntity.ok(page);
+        return ResponseEntity.ok(pageService.updatePage(pageId, updatedPage));
     }
 
     @DeleteMapping("{id}")

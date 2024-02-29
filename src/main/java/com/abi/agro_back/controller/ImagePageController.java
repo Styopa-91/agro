@@ -12,10 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,29 +30,29 @@ public class ImagePageController {
     @Autowired
     private ImagePageService imagePageService;
 
-    @PostMapping
-    public ResponseEntity<ImagePage> createImagePage(@Validated @RequestBody ImagePage imagePage) {
-        ImagePage savedImagePage = imagePageService.createImagePage(imagePage);
-        return new ResponseEntity<>(savedImagePage, HttpStatus.CREATED);
+    @PostMapping(consumes = { "multipart/form-data" })
+    public ResponseEntity<ImagePage> createImagePage(@RequestPart("image") MultipartFile image,
+                                                     @RequestPart ImagePage imagePage) throws IOException {
+
+        return new ResponseEntity<>(imagePageService.createImagePage(image, imagePage), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<ImagePage> getImagePageById(@PathVariable("id") String id) {
-        ImagePage imagePage = imagePageService.getImagePageById(id);
-        return ResponseEntity.ok(imagePage);
+
+        return ResponseEntity.ok(imagePageService.getImagePageById(id));
     }
 
     @GetMapping()
     public ResponseEntity<List<ImagePage>> getAllImagePages() {
-        List<ImagePage> imagePages = imagePageService.getAllImagePages();
-        return ResponseEntity.ok(imagePages);
+
+        return ResponseEntity.ok(imagePageService.getAllImagePages());
     }
 
     @PutMapping(value = "{id}")
     public ResponseEntity<ImagePage> updateImagePage(@PathVariable("id") String  imagePageId,
                                               @RequestBody ImagePage updatedImagePage) {
-        ImagePage imagePage = imagePageService.updateImagePage(imagePageId, updatedImagePage);
-        return ResponseEntity.ok(imagePage);
+        return ResponseEntity.ok(imagePageService.updateImagePage(imagePageId, updatedImagePage));
     }
 
     @DeleteMapping("{id}")
@@ -71,8 +72,7 @@ public class ImagePageController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ImagePage>> getImagePagesByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
-        List<ImagePage> imagePages = imagePageService.getImagePagesByKeySearch(key, oblast);
-        return ResponseEntity.ok(imagePages);
+        return ResponseEntity.ok(imagePageService.getImagePagesByKeySearch(key, oblast));
     }
 
 

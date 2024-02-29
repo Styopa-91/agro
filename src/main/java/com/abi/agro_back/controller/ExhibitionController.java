@@ -10,13 +10,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,21 +120,21 @@ public class ExhibitionController {
 
     @GetMapping("{id}")
     public ResponseEntity<Exhibition> getExhibitionById(@PathVariable("id") String id) {
-        Exhibition exhibition = exhibitionService.getExhibitionById(id);
-        return ResponseEntity.ok(exhibition);
+
+        return ResponseEntity.ok(exhibitionService.getExhibitionById(id));
     }
 
     @GetMapping()
     public ResponseEntity<List<Exhibition>> getAllExhibitions() {
-        List<Exhibition> exhibitions = exhibitionService.getAllExhibitions();
-        return ResponseEntity.ok(exhibitions);
+
+        return ResponseEntity.ok(exhibitionService.getAllExhibitions());
     }
 
     @PatchMapping(value = "{id}")
     public ResponseEntity<Exhibition> updateExhibition(@PathVariable("id") String  exhibitionId,
                                               @RequestBody @Valid Exhibition updatedExhibition) {
-        Exhibition exhibition = exhibitionService.updateExhibition(exhibitionId, updatedExhibition);
-        return ResponseEntity.ok(exhibition);
+
+        return ResponseEntity.ok(exhibitionService.updateExhibition(exhibitionId, updatedExhibition));
     }
 
     @DeleteMapping("{id}")
@@ -150,27 +148,27 @@ public class ExhibitionController {
                                           @RequestParam(defaultValue = "20") int sizePerPage,
                                           @RequestParam(defaultValue = "START_DATE") SortField sortField,
                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
-        Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
-        return exhibitionService.findAllByPage(pageable);
+
+        return exhibitionService.findAllByPage(PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
     }
 
     @GetMapping("/filter")
     public ResponseEntity<List<Exhibition>> getExhibitionsByDate(
             @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  Date start,
             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  Date end) {
-        List<Exhibition> exhibitions = exhibitionService.getExhibitionsByDate(start, end);
-        return ResponseEntity.ok(exhibitions);
+
+        return ResponseEntity.ok(exhibitionService.getExhibitionsByDate(start, end));
     }
     @GetMapping("/archive")
         public ResponseEntity<List<Exhibition>> getExhibitionsArchive() {
-            List<Exhibition> exhibitions = exhibitionService.getExhibitionsArchive();
-            return ResponseEntity.ok(exhibitions);
+
+            return ResponseEntity.ok(exhibitionService.getExhibitionsArchive());
         }
 
     @GetMapping("/search")
     public ResponseEntity<List<Exhibition>> getExhibitionsByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
-        List<Exhibition> exhibitions = exhibitionService.getExhibitionsByKeySearch(key, oblast);
-        return ResponseEntity.ok(exhibitions);
+
+        return ResponseEntity.ok(exhibitionService.getExhibitionsByKeySearch(key, oblast));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

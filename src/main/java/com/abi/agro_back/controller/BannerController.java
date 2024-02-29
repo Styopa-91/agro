@@ -31,32 +31,34 @@ public class BannerController {
 
     @PostMapping
     public ResponseEntity<Banner> createBanner(@Valid @RequestBody Banner banner) {
-        Banner savedBanner = bannerService.createBanner(banner);
-        return new ResponseEntity<>(savedBanner, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(bannerService.createBanner(banner), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Banner> getBannerById(@PathVariable("id") String id) {
-        Banner banner = bannerService.getBannerById(id);
-        return ResponseEntity.ok(banner);
+
+        return ResponseEntity.ok(bannerService.getBannerById(id));
     }
 
     @GetMapping()
     public ResponseEntity<List<Banner>> getAllBanners() {
-        List<Banner> banners = bannerService.getAllBanners();
-        return ResponseEntity.ok(banners);
+
+        return ResponseEntity.ok(bannerService.getAllBanners());
     }
 
     @PutMapping(value = "{id}")
     public ResponseEntity<Banner> updateBanner(@PathVariable("id") String  bannerId,
                                               @RequestBody @Valid Banner updatedBanner) {
-        Banner banner = bannerService.updateBanner(bannerId, updatedBanner);
-        return ResponseEntity.ok(banner);
+
+        return ResponseEntity.ok(bannerService.updateBanner(bannerId, updatedBanner));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteBannerById(@PathVariable("id") String  id) {
+
         bannerService.deleteBanner(id);
+
         return ResponseEntity.ok("Banner deleted successfully!");
     }
 
@@ -66,13 +68,14 @@ public class BannerController {
                                           @RequestParam(defaultValue = "CREATED_AT") SortField sortField,
                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
         Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
+
         return bannerService.findAllByPage(pageable);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<Banner>> getBannersByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
-        List<Banner> banners = bannerService.getBannersByKeySearch(key, oblast);
-        return ResponseEntity.ok(banners);
+
+        return ResponseEntity.ok(bannerService.getBannersByKeySearch(key, oblast));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

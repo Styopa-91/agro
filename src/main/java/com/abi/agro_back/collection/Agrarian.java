@@ -33,8 +33,6 @@ public class Agrarian {
 
     private String oblast;
 
-    private String region;
-
     private String oldRegion;
 
     private boolean isPriority;

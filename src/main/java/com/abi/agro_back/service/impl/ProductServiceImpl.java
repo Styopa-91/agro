@@ -1,12 +1,17 @@
 package com.abi.agro_back.service.impl;
 
+import com.abi.agro_back.collection.Photo;
 import com.abi.agro_back.collection.Product;
+import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.ProductRepository;
 import com.abi.agro_back.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @Service
@@ -14,9 +19,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private StorageService storageService;
 
     @Override
-    public Product createProduct(Product product) {
+    public Product createProduct(MultipartFile image, Product product) throws IOException {
+
+        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL imageUrl = storageService.uploadPhoto(image, imageKey);
+        Photo imagePhoto = new Photo(imageKey, imageUrl);
+        product.setImage(imagePhoto);
+
 
         return productRepository.save(product);
     }

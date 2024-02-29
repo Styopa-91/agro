@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface AgrarianRepository extends MongoRepository<Agrarian, String> {
     List<Agrarian> findAllByOrderByIsPriorityDescTitleAsc();
+    List<Agrarian> findAllByOblastOrderByIsPriorityDescTitleAsc(String oblast);
+    List<Agrarian> findAllByOblastAndOldRegionOrderByIsPriorityDescTitleAsc(String oblast);
 
 }
