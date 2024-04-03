@@ -37,25 +37,19 @@ public class ExhibitionController {
     @PostMapping(consumes = { "multipart/form-data" })
     public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos,
                                                        @RequestPart("image") MultipartFile image,
-                                                       @RequestPart("logo") MultipartFile logo,
                                                        @Valid @RequestPart("exhibition") Exhibition exhibition) throws IOException {
-        exhibition.setGallery_photos(new ArrayList<>());
+        exhibition.setGalleryPhotos(new ArrayList<>());
         for (MultipartFile f : photos) {
             String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
             URL url = storageService.uploadPhoto(f, key);
             Photo photo = new Photo(key, url);
-            exhibition.getGallery_photos().add(photo);
+            exhibition.getGalleryPhotos().add(photo);
         }
 
         String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
         URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
         exhibition.setImage(imagePhoto);
-
-        String logoKey = logo.getOriginalFilename() + "" + System.currentTimeMillis();
-        URL logoUrl = storageService.uploadPhoto(logo, logoKey);
-        Photo logoPhoto = new Photo(logoKey, logoUrl);
-        exhibition.setLogo(logoPhoto);
 
         Exhibition savedExhibition = exhibitionService.createExhibition(exhibition);
         return new ResponseEntity<>(savedExhibition, HttpStatus.CREATED);
@@ -143,26 +137,27 @@ public class ExhibitionController {
         return ResponseEntity.ok("Exhibition deleted successfully!");
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<Exhibition>> getExhibitionsByDate(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date end) {
+
+        return ResponseEntity.ok(exhibitionService.getExhibitionsByDate(start, end));
+    }
     @GetMapping("/page")
     public Page<Exhibition> findAllByPage(@RequestParam(defaultValue = "0") int page,
                                           @RequestParam(defaultValue = "20") int sizePerPage,
                                           @RequestParam(defaultValue = "START_DATE") SortField sortField,
                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
-
         return exhibitionService.findAllByPage(PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<Exhibition>> getExhibitionsByDate(
-            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  Date start,
-            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  Date end) {
-
-        return ResponseEntity.ok(exhibitionService.getExhibitionsByDate(start, end));
-    }
     @GetMapping("/archive")
-        public ResponseEntity<List<Exhibition>> getExhibitionsArchive() {
-
-            return ResponseEntity.ok(exhibitionService.getExhibitionsArchive());
+        public Page<Exhibition> getExhibitionsArchive(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "20") int sizePerPage,
+                                                      @RequestParam(defaultValue = "START_DATE") SortField sortField,
+                                                      @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
+        return exhibitionService.getExhibitionsArchive(PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
         }
 
     @GetMapping("/search")

@@ -1,16 +1,16 @@
 package com.abi.agro_back.service.impl;
 
-import com.abi.agro_back.collection.Agrarian;
-import com.abi.agro_back.collection.Note;
-import com.abi.agro_back.collection.Photo;
-import com.abi.agro_back.collection.User;
+import com.abi.agro_back.collection.*;
 import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.AgrarianRepository;
 import com.abi.agro_back.repository.NoteRepository;
 import com.abi.agro_back.repository.UserRepository;
+import com.abi.agro_back.repository.VillageCouncilRepository;
 import com.abi.agro_back.service.AgrarianService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +26,8 @@ public class AgrarianServiceImpl implements AgrarianService {
 
     @Autowired
     private AgrarianRepository agrarianRepository;
+    @Autowired
+    private VillageCouncilRepository villageCouncilRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -80,7 +82,7 @@ public class AgrarianServiceImpl implements AgrarianService {
 
     @Override
     public List<Agrarian> getAllAgrariansByOblast(String oblast) {
-        return agrarianRepository.findAllByOblastOrderByIsPriorityDescTitleAsc(oblast);
+        return agrarianRepository.findAllByOblastAndIsForOblastOnlyTrueOrderByIsPriorityDescTitleAsc(oblast);
     }
 
     @Override
@@ -116,6 +118,25 @@ public class AgrarianServiceImpl implements AgrarianService {
     }
 
     @Override
-    public List<Agrarian> getAllAgrariansByRegion(String oblast, String region) {
-        return agrarianRepository.findAllByOblastAndOldRegionOrderByIsPriorityDescTitleAsc(oblast);    }
+    public Page<Agrarian> getAllAgrariansByRegion(String oblast, String region, Pageable pageable) {
+        return agrarianRepository.findAllByOblastAndOldRegionOrderByIsPriorityDescTitleAsc(oblast, region, pageable);
+    }
+
+    @Override
+    public long getCountAllAgrarians() {
+        long count = villageCouncilRepository.count() + agrarianRepository.count();
+        return count;
+    }
+
+    @Override
+    public long getCountAgrariansByOblast(String oblast) {
+        long count = villageCouncilRepository.countAllByOblastEquals(oblast) + agrarianRepository.countAllByOblastEquals(oblast);
+        return count;
+    }
+
+    @Override
+    public long getCountAgrariansByRegion(String oblast, String region) {
+        long count = villageCouncilRepository.countAllByOblastEqualsAndOldRegionEquals(oblast, region) + agrarianRepository.countAllByOblastEqualsAndOldRegionEquals(oblast, region);
+        return count;
+    }
 }

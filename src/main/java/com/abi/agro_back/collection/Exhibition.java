@@ -25,9 +25,7 @@ public class Exhibition {
 
     private String description;
 
-    private String content;
-
-    private Photo logo;
+    private String excerpt;
 
     private Photo image;
 
@@ -35,13 +33,15 @@ public class Exhibition {
 
     private String email;
 
-    private String oblast;
+    private String location;
 
-    private List<Photo> gallery_photos;
+    private List<Photo> galleryPhotos;
 
     private String address;
 
     private String website;
+
+    private String contactTitle;
 
     private List<String> keyWords;
 

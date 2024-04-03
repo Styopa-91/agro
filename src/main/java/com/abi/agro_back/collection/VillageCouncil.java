@@ -15,8 +15,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("agrarians")
-public class Agrarian {
+@Document("villageCouncils")
+public class VillageCouncil {
     @Id
     private String id;
 
@@ -36,10 +36,6 @@ public class Agrarian {
 
     private String oldRegion;
 
-    private boolean isPriority;
-
-    private boolean isForOblastOnly;
-
     private URL redirect;
 
     private String area;
@@ -50,6 +46,6 @@ public class Agrarian {
 
     private String services;
 
-    private String villageCouncil;
+    private List<String> villages;
 
 }

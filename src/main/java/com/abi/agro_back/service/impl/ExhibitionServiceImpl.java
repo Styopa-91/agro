@@ -60,37 +60,37 @@ public class ExhibitionServiceImpl implements ExhibitionService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Exhibition is not exists with given id : " + exhibitionId));
         storageService.deletePhoto(exhibition.getImage().getKey());
-        storageService.deletePhoto(exhibition.getLogo().getKey());
-        for (Photo photo : exhibition.getGallery_photos()){
+        for (Photo photo : exhibition.getGalleryPhotos()){
             storageService.deletePhoto(photo.getKey());
         }
         exhibitionRepository.deleteById(exhibitionId);
-
     }
 
     @Override
     public List<Exhibition> getExhibitionsByDate(Date start, Date end) {
         start.setHours(0);
         end.setHours(24);
-        return exhibitionRepository.findExhibitionsByStartDateIsBetweenOrEndDateIsBetweenOrderByStartDate(start, end, start, end);
+        return exhibitionRepository.findExhibitionsByStartDateIsBetweenOrEndDateIsBetweenOrStartDateBeforeAndEndDateAfterOrderByStartDate(start, end, start, end, start, end);
     }
 
     @Override
-    public List<Exhibition> getExhibitionsArchive() {
+    public Page<Exhibition> getExhibitionsArchive(Pageable pageable) {
         Date now = new Date();
         now.setHours(0);
-        return exhibitionRepository.findExhibitionsByEndDateBeforeOrderByEndDateDesc(now);
+        return exhibitionRepository.findExhibitionsByEndDateBeforeOrderByEndDateDesc(now, pageable);
     }
 
     @Override
     public Page<Exhibition> findAllByPage(Pageable pageable) {
-        return exhibitionRepository.findAll(pageable);
+        Date now = new Date();
+        now.setHours(0);
+        return exhibitionRepository.findExhibitionsByEndDateAfterOrderByEndDateDesc(now, pageable);
     }
 
     @Override
     public List<Exhibition> getExhibitionsByKeySearch(String key, String oblast) {
         if (!oblast.isEmpty()) {
-            return exhibitionRepository.findExhibitionsByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(key, oblast);
+            return exhibitionRepository.findExhibitionsByKeyWordsIsContainingIgnoreCaseAndLocationIsIgnoreCase(key, oblast);
         } else {
             return exhibitionRepository.findExhibitionsByKeyWordsIsContainingIgnoreCase(key);
         }

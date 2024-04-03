@@ -2,10 +2,14 @@ package com.abi.agro_back.controller;
 
 import com.abi.agro_back.collection.Agrarian;
 import com.abi.agro_back.collection.Note;
+import com.abi.agro_back.collection.SortField;
 import com.abi.agro_back.service.AgrarianService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -69,9 +73,14 @@ public class AgrarianController {
     }
 
     @GetMapping("/region")
-    public ResponseEntity<List<Agrarian>> getAllAgrariansByRegion(@RequestParam("oblast") String oblast, @RequestParam("region") String region) {
+    public Page<Agrarian> getAllAgrariansByRegion(@RequestParam("oblast") String oblast,
+                                                  @RequestParam("region") String region,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "20") int sizePerPage,
+                                                  @RequestParam(defaultValue = "START_DATE") SortField sortField,
+                                                  @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
 
-        return ResponseEntity.ok(agrarianService.getAllAgrariansByRegion(oblast, region));
+        return agrarianService.getAllAgrariansByRegion(oblast, region, PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
     }
 
     @PutMapping(value = "{id}")
@@ -87,6 +96,22 @@ public class AgrarianController {
         return ResponseEntity.ok("Agrarian deleted successfully!");
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCountAllAgrarians() {
+        long count = agrarianService.getCountAllAgrarians();
+        return ResponseEntity.ok(count);
+    }
+    @GetMapping("/count/obl")
+    public ResponseEntity<Long> getCountAgrariansByOblast(@RequestParam("oblast") String oblast) {
+        long count = agrarianService.getCountAgrariansByOblast(oblast);
+        return ResponseEntity.ok(count);
+    }
+    @GetMapping("/count/region")
+    public ResponseEntity<Long> getCountAgrariansByRegion(@RequestParam("oblast") String oblast,
+                                                          @RequestParam("region") String region) {
+        long count = agrarianService.getCountAgrariansByRegion(oblast, region);
+        return ResponseEntity.ok(count);
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {

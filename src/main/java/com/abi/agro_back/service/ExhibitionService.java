@@ -20,7 +20,7 @@ public interface ExhibitionService {
 
     List<Exhibition> getExhibitionsByDate(Date start, Date end);
 
-    List<Exhibition> getExhibitionsArchive();
+    Page<Exhibition> getExhibitionsArchive(Pageable pageable);
 
     Page<Exhibition> findAllByPage(Pageable pageable);
 

@@ -21,10 +21,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
-
+//            "/api/auth/register",
             "/api/auth/authenticate",
-            "/swagger-ui/**",
-            "/v3/**",
+//            "/api/allPhotos",
+//            "/swagger-ui/**",
+//            "/v3/**",
             "/api/users/resetPassword/**",
             "/api/users/savePassword",
     };
@@ -54,27 +55,50 @@ public class SecurityConfiguration {
                                 .requestMatchers(PUT, "/api/reg-request/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/reg-request/**").hasAuthority(ADMIN.name())
 
+//                                .requestMatchers(GET, "/api/agrarians").permitAll()
+//                                .requestMatchers(GET, "/api/agrarians/**").permitAll()
                                 .requestMatchers(GET, "/api/agrarians").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/agrarians/count").permitAll()
+                                .requestMatchers(GET, "/api/agrarians/count/**").permitAll()
+                                .requestMatchers(GET, "/api/agrarians/**").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(POST, "/api/agrarians/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/agrarians/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/agrarians/**").hasAuthority(ADMIN.name())
 
+//                                .requestMatchers(GET, "/api/villageCouncil").permitAll()
+//                                .requestMatchers(GET, "/api/villageCouncil/**").permitAll()
+                                .requestMatchers(GET, "/api/villageCouncil").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/villageCouncil/**").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(POST, "/api/villageCouncil/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(PUT, "/api/villageCouncil/**").hasAuthority(ADMIN.name())
+                                .requestMatchers(DELETE, "/api/villageCouncil/**").hasAuthority(ADMIN.name())
+
                                 .requestMatchers(GET, "/api/banners").permitAll()
+                                .requestMatchers(GET, "/api/banners/**").permitAll()
                                 .requestMatchers(POST, "/api/banners/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/banners/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/banners/**").hasAuthority(ADMIN.name())
 
                                 .requestMatchers(GET, "/api/exhibitions").permitAll()
+                                .requestMatchers(GET, "/api/exhibitions/**").permitAll()
                                 .requestMatchers(POST, "/api/exhibitions/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/exhibitions/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/exhibitions/**").hasAuthority(ADMIN.name())
 
                                 .requestMatchers(GET, "/api/imagePages").permitAll()
+                                .requestMatchers(GET, "/api/imagePages/**").permitAll()
                                 .requestMatchers(POST, "/api/imagePages/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/imagePages/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/imagePages/**").hasAuthority(ADMIN.name())
 
+                                .requestMatchers(GET, "/api/products").permitAll()
+                                .requestMatchers(GET, "/api/products/**").permitAll()
+                                .requestMatchers(POST, "/api/products/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(PUT, "/api/products/**").hasAuthority(ADMIN.name())
+                                .requestMatchers(DELETE, "/api/products/**").hasAuthority(ADMIN.name())
+
                                 .requestMatchers(GET, "/api/pages").permitAll()
+                                .requestMatchers(GET, "/api/pages/**").permitAll()
                                 .requestMatchers(POST, "/api/pages/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/pages/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/pages/**").hasAuthority(ADMIN.name())

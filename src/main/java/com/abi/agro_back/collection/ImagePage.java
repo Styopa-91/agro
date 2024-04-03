@@ -20,23 +20,29 @@ public class ImagePage {
 
     private String title;
 
+    private Photo logo;
+
     private String description;
+
+    private String excerpt;
+
+    private String advantages;
+
+    private String address;
 
     private String phone;
 
-    private Photo image;
+    private Photo featuredImage;
 
-    private String oblast;
+    private List<Photo> galleryPhotos;
 
     private String video;
 
     private String email;
 
-    private String address;
-
     private String website;
 
-    private String owner;
+    private String person;
 
     private List<String> keyWords;
 

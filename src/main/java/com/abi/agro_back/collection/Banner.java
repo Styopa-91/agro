@@ -24,14 +24,20 @@ public class Banner {
     @NotBlank(message = "required field")
     private String title;
 
-    private String content;
+    private String info;
 
-    private String image;
+    private Photo img;
 
-    private String oblast;
+    private String location;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    private String phone;
+
+    private String email;
+
+    private String url;
+
+//    @CreatedDate
+//    private LocalDateTime createdAt;
 
     private List<String> keyWords;
 

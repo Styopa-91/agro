@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface BannerRepository extends MongoRepository<Banner, String> {
     List<Banner> findBannersByKeyWordsIsContainingIgnoreCase(String key);
-    List<Banner> findBannersByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(String key, String oblast);
+    List<Banner> findBannersByKeyWordsIsContainingIgnoreCaseAndLocationIsIgnoreCase(String key, String location);
+
+    List<Banner> findBannersByLocationIs(String oblast);
 }

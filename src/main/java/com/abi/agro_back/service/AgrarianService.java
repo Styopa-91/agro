@@ -2,6 +2,8 @@ package com.abi.agro_back.service;
 
 import com.abi.agro_back.collection.Agrarian;
 import com.abi.agro_back.collection.Note;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,5 +28,11 @@ public interface AgrarianService {
 
     List<Note> getUserNotesByAgrarianId(String id);
 
-    List<Agrarian> getAllAgrariansByRegion(String oblast, String region);
+    Page<Agrarian> getAllAgrariansByRegion(String oblast, String region, Pageable pageable);
+
+    long getCountAllAgrarians();
+
+    long getCountAgrariansByOblast(String oblast);
+
+    long getCountAgrariansByRegion(String oblast, String region);
 }

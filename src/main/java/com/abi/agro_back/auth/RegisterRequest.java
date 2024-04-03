@@ -1,6 +1,5 @@
 package com.abi.agro_back.auth;
 
-import com.abi.agro_back.collection.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +15,4 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String phone;
-    private String password;
 }

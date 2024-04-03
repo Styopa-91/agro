@@ -29,11 +29,7 @@ public class ImagePageServiceImpl implements ImagePageService {
     private StorageService storageService;
 
     @Override
-    public ImagePage createImagePage(MultipartFile image, ImagePage imagePage) throws IOException {
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
-        URL imageUrl = storageService.uploadPhoto(image, imageKey);
-        Photo imagePhoto = new Photo(imageKey, imageUrl);
-        imagePage.setImage(imagePhoto);
+    public ImagePage createImagePage(ImagePage imagePage) throws IOException {
 
         return imagePageRepository.save(imagePage);
     }
@@ -79,11 +75,7 @@ public class ImagePageServiceImpl implements ImagePageService {
     }
 
     @Override
-    public List<ImagePage> getImagePagesByKeySearch(String key, String oblast) {
-        if (!oblast.isEmpty()) {
-            return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCaseAndOblastIsIgnoreCase(key, oblast);
-        } else {
+    public List<ImagePage> getImagePagesByKeySearch(String key) {
             return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCase(key);
-        }
     }
 }

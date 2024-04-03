@@ -1,9 +1,12 @@
 package com.abi.agro_back.controller;
 
 import com.abi.agro_back.collection.ImagePage;
+import com.abi.agro_back.collection.Photo;
 import com.abi.agro_back.collection.SortField;
+import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.service.ImagePageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +34,36 @@ public class ImagePageController {
 
     @Autowired
     private ImagePageService imagePageService;
+    @Autowired
+    private StorageService storageService;
 
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<ImagePage> createImagePage(@RequestPart("image") MultipartFile image,
-                                                     @RequestPart ImagePage imagePage) throws IOException {
+    public ResponseEntity<ImagePage> createImagePage(@RequestPart("galleryPhotos") List<MultipartFile> photos,
+                                                     @RequestPart("featuredImage") MultipartFile featuredImage,
+                                                     @RequestPart("logo") MultipartFile logo,
+                                                     @Valid @RequestPart("imagePage") ImagePage imagePage) throws IOException {
 
-        return new ResponseEntity<>(imagePageService.createImagePage(image, imagePage), HttpStatus.CREATED);
+        imagePage.setGalleryPhotos(new ArrayList<>());
+        for (MultipartFile f : photos) {
+            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+            URL url = storageService.uploadPhoto(f, key);
+            Photo photo = new Photo(key, url);
+            imagePage.getGalleryPhotos().add(photo);
+        }
+
+        String imageKey = featuredImage.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL imageUrl = storageService.uploadPhoto(featuredImage, imageKey);
+        Photo imagePhoto = new Photo(imageKey, imageUrl);
+        imagePage.setFeaturedImage(imagePhoto);
+
+        String logoKey = featuredImage.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL logoUrl = storageService.uploadPhoto(logo, logoKey);
+        Photo logoPhoto = new Photo(logoKey, logoUrl);
+        imagePage.setLogo(logoPhoto);
+
+
+        ImagePage savedImagePage = imagePageService.createImagePage(imagePage);
+        return new ResponseEntity<>(savedImagePage, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
@@ -71,8 +100,8 @@ public class ImagePageController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ImagePage>> getImagePagesByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {
-        return ResponseEntity.ok(imagePageService.getImagePagesByKeySearch(key, oblast));
+    public ResponseEntity<List<ImagePage>> getImagePagesByKeySearch(@RequestParam String  key) {
+        return ResponseEntity.ok(imagePageService.getImagePagesByKeySearch(key));
     }
 
 

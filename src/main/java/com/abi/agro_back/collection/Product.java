@@ -23,7 +23,7 @@ public class Product {
 
     private String description;
 
-    private int price;
+    private String price;
 
     private Photo image;
 
