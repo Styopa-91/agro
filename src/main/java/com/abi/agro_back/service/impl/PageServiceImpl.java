@@ -1,12 +1,15 @@
 package com.abi.agro_back.service.impl;
 
+import com.abi.agro_back.collection.Exhibition;
 import com.abi.agro_back.collection.Page;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.PageRepository;
 import com.abi.agro_back.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,6 +39,10 @@ public class PageServiceImpl implements PageService {
         return pageRepository.findAll();
     }
 
+    @Override
+    public org.springframework.data.domain.Page<Page> findAllByPage(Pageable pageable) {
+        return pageRepository.findAll(pageable);
+    }
     @Override
     public Page updatePage(String pageId, Page updatedPage) {
 

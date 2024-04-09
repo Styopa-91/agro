@@ -11,6 +11,7 @@ import com.abi.agro_back.service.AgrarianService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,8 @@ public class AgrarianServiceImpl implements AgrarianService {
     private NoteRepository noteRepository;
     @Autowired
     private StorageService storageService;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public Agrarian createAgrarian(MultipartFile image, Agrarian agrarian) throws IOException {
@@ -119,7 +122,7 @@ public class AgrarianServiceImpl implements AgrarianService {
 
     @Override
     public Page<Agrarian> getAllAgrariansByRegion(String oblast, String region, Pageable pageable) {
-        return agrarianRepository.findAllByOblastAndOldRegionOrderByIsPriorityDescTitleAsc(oblast, region, pageable);
+        return agrarianRepository.findAllByOblastAndOldRegionOrderByImageDescTitleAsc(oblast, region, pageable);
     }
 
     @Override

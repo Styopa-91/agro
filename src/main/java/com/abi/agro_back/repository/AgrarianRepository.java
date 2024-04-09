@@ -14,6 +14,7 @@ public interface AgrarianRepository extends MongoRepository<Agrarian, String> {
     List<Agrarian> findAllByOrderByIsPriorityDescTitleAsc();
     List<Agrarian> findAllByOblastAndIsForOblastOnlyTrueOrderByIsPriorityDescTitleAsc(String oblast);
     Page<Agrarian> findAllByOblastAndOldRegionOrderByIsPriorityDescTitleAsc(String oblast, String region, Pageable pageable);
+    Page<Agrarian> findAllByOblastAndOldRegionOrderByImageDescTitleAsc(String oblast, String region, Pageable pageable);
     long countAllByOblastEquals(String oblast);
     long countAllByOblastEqualsAndOldRegionEquals(String oblast, String region);
 }

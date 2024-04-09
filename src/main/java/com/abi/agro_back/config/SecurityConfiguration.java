@@ -27,6 +27,7 @@ public class SecurityConfiguration {
 //            "/swagger-ui/**",
 //            "/v3/**",
             "/api/users/resetPassword/**",
+            "/api/users/resetPassword",
             "/api/users/savePassword",
     };
 
@@ -99,7 +100,7 @@ public class SecurityConfiguration {
 
                                 .requestMatchers(GET, "/api/pages").permitAll()
                                 .requestMatchers(GET, "/api/pages/**").permitAll()
-                                .requestMatchers(POST, "/api/pages/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(POST, "/api/pages/**").hasAnyAuthority(ADMIN.name(), USER.name())
                                 .requestMatchers(PUT, "/api/pages/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/pages/**").hasAuthority(ADMIN.name())
 

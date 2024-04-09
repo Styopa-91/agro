@@ -25,9 +25,9 @@ public class Page {
 //    @Size(min = 5)
     private String title;
 
-    private String description;
+    private String content;
 
-    private String image;
+    private Photo image;
 
     @CreatedDate
     private LocalDateTime createdAt;

@@ -62,33 +62,31 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully!");
     }
 
-    @PostMapping("/resetPassword")
-    public ResponseEntity<String> resetPassword(HttpServletRequest request,
-                                         @RequestParam("email") String userEmail) {
+    @GetMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword(@RequestParam("email") String userEmail) {
         User user = userService.findUserByEmail(userEmail);
         if (user == null) {
             throw new ResourceNotFoundException(user.getEmail() + " not found");
         }
         String token = java.util.UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
-        System.out.printf(request.getContextPath());
         mailSender.sendResetEmail(token, user.getEmail());
 
         return ResponseEntity.ok("Link for reset password sent to email");
     }
 
-    @PostMapping("/savePassword")
-    public ResponseEntity<String> savePassword(@RequestBody PasswordDto passwordDto) {
-
-        String result = userService.validatePasswordResetToken(passwordDto.getToken());
+    @GetMapping("/savePassword")
+    public ResponseEntity<String> savePassword(@RequestParam("token") String token,
+                                               @RequestParam("password") String password) {
+        String result = userService.validatePasswordResetToken(token);
 
         if(result != null) {
             return ResponseEntity.ok("Password saved");
         }
 
-        User user = userService.getUserByPasswordResetToken(passwordDto.getToken());
+        User user = userService.getUserByPasswordResetToken(token);
         if(user != null) {
-            userService.changeUserPassword(user, passwordDto.getNewPassword());
+            userService.changeUserPassword(user, password);
             return ResponseEntity.ok("Password Updated");
         } else {
             return ResponseEntity.ok("Password have not updated");

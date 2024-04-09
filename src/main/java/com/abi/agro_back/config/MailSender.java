@@ -78,7 +78,7 @@ public class MailSender {
             message.setSubject("Agro reset password!");
 
             message.setContent("<h1>Your link for reset password!</h1>" +
-                    "<p>This is your link </p>" + "\r\n"+ contextPath + "/user/changePassword?token=" + token, "text/html");
+                    "<p>This is your link </p>" + "\r\n"+ contextPath + "/savePassword?token=" + token, "text/html");
 
             Transport tr = session.getTransport();
             tr.connect(emailUser, emailPassword);

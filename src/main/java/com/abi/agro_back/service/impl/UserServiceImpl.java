@@ -110,7 +110,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isTokenExpired(PasswordResetToken passToken) {
-        final Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR_OF_DAY, -10);
         return passToken.getExpiryDate().before(cal.getTime());
     }
 }
