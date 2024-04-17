@@ -76,8 +76,6 @@ public class MailSender {
             message.setFrom(new InternetAddress(emailUser));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject("Agro reset password!");
-//            String testUrl = "<a href='"+contextPath+"'>Test Link</a>";
-//            message.setContent("<h1>Test Link</h1>" + testUrl, "text/html");
             String url = "<a href='"+ contextPath + "/savePassword?token=" + token + "'>Link for reset password</a>";
             message.setContent("<h1>Your link for reset password!</h1>" +
                     "<p>This is your link </p>" + "\r\n"+ url, "text/html");

@@ -50,6 +50,8 @@ public class Agrarian {
 
     private String services;
 
+    private String edrpou;
+
     private String villageCouncil;
 
 }

@@ -3,12 +3,10 @@ package com.abi.agro_back;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-
 @SpringBootApplication
 public class AgroBackApplication {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		SpringApplication.run(AgroBackApplication.class, args);
 	}
 //	@Bean

@@ -1,6 +1,7 @@
 package com.abi.agro_back.controller;
 
 import com.abi.agro_back.collection.Page;
+import com.abi.agro_back.collection.PageDto;
 import com.abi.agro_back.collection.Photo;
 import com.abi.agro_back.collection.SortField;
 import com.abi.agro_back.config.StorageService;
@@ -36,12 +37,17 @@ public class PageController {
 
     @PostMapping
     public ResponseEntity<Page> createPage(@RequestPart("image") MultipartFile image,
-                                           @Valid @RequestPart("page") Page page) throws IOException {
+                                              @Valid @RequestPart("page") PageDto page) throws IOException {
         String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
         URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
         page.setImage(imagePhoto);
         return new ResponseEntity<>(pageService.createPage(page), HttpStatus.CREATED);
+    }
+    @PatchMapping("/admin/approve/{id}")
+    public ResponseEntity<?> approveEntity(@PathVariable String id) {
+        Page page = pageService.adminApprovesPage(id);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("{id}")

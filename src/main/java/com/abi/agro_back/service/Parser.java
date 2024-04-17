@@ -59,7 +59,7 @@ public class Parser {
     public void start() throws IOException {
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.idcompass.com/?lang=ru&section=base");
-        Cookie cookie = new Cookie("PHPSESSID", "a6236b4e00274fa5bb96dde71374a684");
+        Cookie cookie = new Cookie("PHPSESSID", "4342526be1ebcafea7ff111dc420119a");
         driver.manage().addCookie(cookie);
         for (int i=0; i<25; i++) {
             WebElement el = driver.findElements(By.cssSelector("#regionsList .regionsTable tbody tr a")).get(i);
@@ -164,7 +164,7 @@ public class Parser {
     public void getOblastsToHashMap() {
         try {
             String filePath = "https://www.idcompass.com/?lang=ru&section=base";
-            Document doc = Jsoup.connect(filePath).cookie("PHPSESSID", "a6236b4e00274fa5bb96dde71374a684").get();
+            Document doc = Jsoup.connect(filePath).cookie("PHPSESSID", "4342526be1ebcafea7ff111dc420119a").get();
             Elements paragraphs = doc.select("#regionsList .regionsTable tbody tr");
             for (Element paragraph : paragraphs) {
                 String rez = paragraph.select("a").attr("href");

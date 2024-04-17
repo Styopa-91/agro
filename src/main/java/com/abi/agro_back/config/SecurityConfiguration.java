@@ -23,6 +23,7 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
 //            "/api/auth/register",
             "/api/auth/authenticate",
+            "/api/service-request",
 //            "/api/allPhotos",
 //            "/swagger-ui/**",
 //            "/v3/**",
@@ -56,8 +57,6 @@ public class SecurityConfiguration {
                                 .requestMatchers(PUT, "/api/reg-request/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/reg-request/**").hasAuthority(ADMIN.name())
 
-//                                .requestMatchers(GET, "/api/agrarians").permitAll()
-//                                .requestMatchers(GET, "/api/agrarians/**").permitAll()
                                 .requestMatchers(GET, "/api/agrarians").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(GET, "/api/agrarians/count").permitAll()
                                 .requestMatchers(GET, "/api/agrarians/count/**").permitAll()
@@ -66,8 +65,6 @@ public class SecurityConfiguration {
                                 .requestMatchers(PUT, "/api/agrarians/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/agrarians/**").hasAuthority(ADMIN.name())
 
-//                                .requestMatchers(GET, "/api/villageCouncil").permitAll()
-//                                .requestMatchers(GET, "/api/villageCouncil/**").permitAll()
                                 .requestMatchers(GET, "/api/villageCouncil").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(GET, "/api/villageCouncil/**").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(POST, "/api/villageCouncil/**").hasAnyAuthority(ADMIN.name())
@@ -103,6 +100,12 @@ public class SecurityConfiguration {
                                 .requestMatchers(POST, "/api/pages/**").hasAnyAuthority(ADMIN.name(), USER.name())
                                 .requestMatchers(PUT, "/api/pages/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/pages/**").hasAuthority(ADMIN.name())
+
+                                .requestMatchers(GET, "/api/demo/agrarians").permitAll()
+                                .requestMatchers(GET, "/api/demo/allAgrarians").permitAll()
+                                .requestMatchers(GET, "/api/demo/get").permitAll()
+                                .requestMatchers(GET, "/api/demo/villageCouncils").permitAll()
+                                .requestMatchers(POST, "/api/demo/admin/set").hasAuthority(ADMIN.name())
 
                                 .anyRequest()
                                 .authenticated()

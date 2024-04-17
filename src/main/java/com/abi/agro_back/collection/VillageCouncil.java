@@ -46,6 +46,8 @@ public class VillageCouncil {
 
     private String services;
 
+    private String edrpou;
+
     private List<String> villages;
 
 }

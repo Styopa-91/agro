@@ -70,5 +70,5 @@ public class VillageCouncilImpl implements VillageCouncilService {
     @Override
     public List<VillageCouncil> getAllVillageCouncilsByRegion(String oblast, String region) {
 
-        return villageCouncilRepository.findAllByOblastAndOldRegionOrderByTitleAsc(oblast, region);    }
+        return villageCouncilRepository.findAllByOblastAndOldRegionOrderByImageDescTitleAsc(oblast, region);    }
 }

@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
@@ -15,10 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("pages")
-public class Page {
-    @Id
-    private String id;
+public class PageDto {
 
 //    @NotNull
     @NotBlank(message = "required field")
@@ -29,9 +23,6 @@ public class Page {
 
     private Photo image;
 
-    @CreatedDate
     private LocalDateTime createdAt;
-
-    private boolean published;
 
 }
