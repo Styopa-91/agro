@@ -60,6 +60,11 @@ public class PageController {
         return ResponseEntity.ok(pageService.getAllPages());
     }
 
+    @GetMapping("/forApprove")
+    public ResponseEntity<List<Page>> getAllForApprovePages() {
+        return ResponseEntity.ok(pageService.getAllForApprovePages());
+    }
+
     @GetMapping("/page")
     public org.springframework.data.domain.Page<Page> findAllByPage(@RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "20") int sizePerPage,

@@ -15,7 +15,7 @@ public interface ExhibitionRepository extends MongoRepository<Exhibition, String
 
     List<Exhibition> findAllByStartDateBeforeAndEndDateAfter(Date from, Date to);
     Page<Exhibition> findExhibitionsByEndDateBeforeOrderByEndDateDesc(Date data, Pageable pageable);
-    Page<Exhibition> findExhibitionsByEndDateAfterOrderByEndDateDesc(Date now, Pageable pageable);
+    Page<Exhibition> findExhibitionsByEndDateAfterOrEndDateIsNullOrderByEndDateDesc(Date now, Pageable pageable);
 
     List<Exhibition> findExhibitionsByKeyWordsIsContainingIgnoreCase(String key);
     List<Exhibition> findExhibitionsByKeyWordsIsContainingIgnoreCaseAndLocationIsIgnoreCase(String key, String oblast);

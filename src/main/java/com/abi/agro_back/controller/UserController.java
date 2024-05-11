@@ -1,13 +1,14 @@
 package com.abi.agro_back.controller;
 
-import com.abi.agro_back.auth.PasswordDto;
+import com.abi.agro_back.collection.SortField;
 import com.abi.agro_back.collection.User;
 import com.abi.agro_back.config.MailSender;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @CrossOrigin("*")
@@ -44,9 +44,11 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public org.springframework.data.domain.Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "20") int sizePerPage,
+                                                                  @RequestParam(defaultValue = "START_DATE") SortField sortField,
+                                                                  @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
+        return userService.getAllUsers(PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
     }
 
     @PutMapping(value = "{id}")

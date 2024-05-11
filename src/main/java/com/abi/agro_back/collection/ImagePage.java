@@ -20,8 +20,6 @@ public class ImagePage {
 
     private String title;
 
-    private Photo logo;
-
     private String description;
 
     private String excerpt;
@@ -32,7 +30,7 @@ public class ImagePage {
 
     private String phone;
 
-    private Photo featuredImage;
+    private Photo image;
 
     private List<Photo> galleryPhotos;
 

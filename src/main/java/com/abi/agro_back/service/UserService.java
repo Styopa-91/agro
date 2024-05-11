@@ -1,15 +1,14 @@
 package com.abi.agro_back.service;
 
 import com.abi.agro_back.collection.User;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
     User createUser(User user);
 
     User getUserById(String userId);
 
-    List<User> getAllUsers();
+    org.springframework.data.domain.Page<User> getAllUsers(Pageable pageable);
 
     User updateUser(String userId, User updatedUser);
 

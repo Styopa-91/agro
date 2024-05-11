@@ -23,7 +23,7 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
 //            "/api/auth/register",
             "/api/auth/authenticate",
-            "/api/service-request",
+//            "/api/service-request",
 //            "/api/allPhotos",
 //            "/swagger-ui/**",
 //            "/v3/**",
@@ -56,6 +56,11 @@ public class SecurityConfiguration {
                                 .requestMatchers(POST, "/api/reg-request").permitAll()
                                 .requestMatchers(PUT, "/api/reg-request/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/reg-request/**").hasAuthority(ADMIN.name())
+
+                                .requestMatchers(GET, "/api/service-request").hasAuthority(ADMIN.name())
+                                .requestMatchers(POST, "/api/service-request").permitAll()
+                                .requestMatchers(PUT, "/api/service-request/**").hasAuthority(ADMIN.name())
+                                .requestMatchers(DELETE, "/api/service-request/**").hasAuthority(ADMIN.name())
 
                                 .requestMatchers(GET, "/api/agrarians").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(GET, "/api/agrarians/count").permitAll()

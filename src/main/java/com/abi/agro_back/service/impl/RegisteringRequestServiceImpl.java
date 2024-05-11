@@ -1,5 +1,8 @@
 package com.abi.agro_back.service.impl;
 
+import com.abi.agro_back.auth.AuthenticationResponse;
+import com.abi.agro_back.auth.AuthenticationService;
+import com.abi.agro_back.auth.RegisterRequest;
 import com.abi.agro_back.collection.RegisteringRequest;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.RegisteringRequestRepository;
@@ -15,6 +18,9 @@ public class RegisteringRequestServiceImpl implements RegisteringRequestService 
     @Autowired
     private RegisteringRequestRepository registeringRequestRepository;
 
+    @Autowired
+    private  AuthenticationService authenticationService;
+
     @Override
     public RegisteringRequest createRegisteringRequest(RegisteringRequest registeringRequest) {
 
@@ -26,6 +32,21 @@ public class RegisteringRequestServiceImpl implements RegisteringRequestService 
 
         return registeringRequestRepository.findById(registeringRequestId)
                 .orElseThrow(() -> new ResourceNotFoundException("RegisteringRequest is not exists with given id : " + registeringRequestId));
+    }
+
+    @Override
+    public AuthenticationResponse approveRegisteringRequestById(String id) {
+        RegisteringRequest registeringRequest = registeringRequestRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("RegisteringRequest is not exists with given id : " + id));
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setFirstName(registeringRequest.getFirstName());
+        registerRequest.setLastName(registeringRequest.getLastName());
+        registerRequest.setEmail(registeringRequest.getEmail());
+        registerRequest.setPhone(registeringRequest.getPhone());
+
+        AuthenticationResponse response = authenticationService.register(registerRequest);
+        registeringRequestRepository.deleteById(id);
+        return response;
     }
 
     @Override

@@ -59,9 +59,13 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Exhibition is not exists with given id : " + exhibitionId));
-        storageService.deletePhoto(exhibition.getImage().getKey());
-        for (Photo photo : exhibition.getGalleryPhotos()){
-            storageService.deletePhoto(photo.getKey());
+        if (exhibition.getImage() != null) {
+            storageService.deletePhoto(exhibition.getImage().getKey());
+        }
+        if (exhibition.getGalleryPhotos() != null) {
+            for (Photo photo : exhibition.getGalleryPhotos()){
+                storageService.deletePhoto(photo.getKey());
+            }
         }
         exhibitionRepository.deleteById(exhibitionId);
     }
@@ -84,7 +88,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     public Page<Exhibition> findAllByPage(Pageable pageable) {
         Date now = new Date();
         now.setHours(0);
-        return exhibitionRepository.findExhibitionsByEndDateAfterOrderByEndDateDesc(now, pageable);
+        return exhibitionRepository.findExhibitionsByEndDateAfterOrEndDateIsNullOrderByEndDateDesc(now, pageable);
     }
 
     @Override

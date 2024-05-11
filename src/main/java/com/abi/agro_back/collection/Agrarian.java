@@ -40,7 +40,7 @@ public class Agrarian {
 
     private boolean isForOblastOnly;
 
-    private URL redirect;
+    private String redirect;
 
     private String area;
 

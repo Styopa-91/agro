@@ -1,18 +1,19 @@
 package com.abi.agro_back.service.impl;
 
 import com.abi.agro_back.collection.PasswordResetToken;
+import com.abi.agro_back.collection.Role;
 import com.abi.agro_back.collection.User;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.PasswordTokenRepository;
 import com.abi.agro_back.repository.UserRepository;
 import com.abi.agro_back.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,9 +39,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-
-        return userRepository.findAll();
+    public org.springframework.data.domain.Page<User> getAllUsers(Pageable pageable) {
+        Role role = Role.USER;
+        return userRepository.findAllByRole(role, pageable);
     }
 
     @Override

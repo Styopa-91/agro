@@ -38,9 +38,9 @@ public class ImagePageController {
     private StorageService storageService;
 
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<ImagePage> createImagePage(@RequestPart("galleryPhotos") List<MultipartFile> photos,
-                                                     @RequestPart("featuredImage") MultipartFile featuredImage,
-                                                     @RequestPart("logo") MultipartFile logo,
+    public ResponseEntity<ImagePage> createImagePage(@RequestPart("photos") List<MultipartFile> photos,
+                                                     @RequestPart("image") MultipartFile image,
+//                                                     @RequestPart("logo") MultipartFile logo,
                                                      @Valid @RequestPart("imagePage") ImagePage imagePage) throws IOException {
 
         imagePage.setGalleryPhotos(new ArrayList<>());
@@ -51,15 +51,15 @@ public class ImagePageController {
             imagePage.getGalleryPhotos().add(photo);
         }
 
-        String imageKey = featuredImage.getOriginalFilename() + "" + System.currentTimeMillis();
-        URL imageUrl = storageService.uploadPhoto(featuredImage, imageKey);
+        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
-        imagePage.setFeaturedImage(imagePhoto);
+        imagePage.setImage(imagePhoto);
 
-        String logoKey = featuredImage.getOriginalFilename() + "" + System.currentTimeMillis();
-        URL logoUrl = storageService.uploadPhoto(logo, logoKey);
-        Photo logoPhoto = new Photo(logoKey, logoUrl);
-        imagePage.setLogo(logoPhoto);
+//        String logoKey = featuredImage.getOriginalFilename() + "" + System.currentTimeMillis();
+//        URL logoUrl = storageService.uploadPhoto(logo, logoKey);
+//        Photo logoPhoto = new Photo(logoKey, logoUrl);
+//        imagePage.setLogo(logoPhoto);
 
 
         ImagePage savedImagePage = imagePageService.createImagePage(imagePage);

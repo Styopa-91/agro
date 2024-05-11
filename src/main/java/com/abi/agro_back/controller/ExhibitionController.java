@@ -124,7 +124,7 @@ public class ExhibitionController {
         return ResponseEntity.ok(exhibitionService.getAllExhibitions());
     }
 
-    @PatchMapping(value = "{id}")
+    @PutMapping(value = "{id}")
     public ResponseEntity<Exhibition> updateExhibition(@PathVariable("id") String  exhibitionId,
                                               @RequestBody @Valid Exhibition updatedExhibition) {
 
@@ -138,9 +138,8 @@ public class ExhibitionController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Exhibition>> getExhibitionsByDate(
-            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date start,
-            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date end) {
+    public ResponseEntity<List<Exhibition>> getExhibitionsByDate(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date start,
+                                                                 @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date end) {
 
         return ResponseEntity.ok(exhibitionService.getExhibitionsByDate(start, end));
     }
@@ -158,7 +157,7 @@ public class ExhibitionController {
                                                       @RequestParam(defaultValue = "START_DATE") SortField sortField,
                                                       @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
         return exhibitionService.getExhibitionsArchive(PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
-        }
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Exhibition>> getExhibitionsByKeySearch(@RequestParam String  key, @RequestParam(defaultValue = "") String oblast) {

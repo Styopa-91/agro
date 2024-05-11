@@ -1,5 +1,6 @@
 package com.abi.agro_back.controller;
 
+import com.abi.agro_back.auth.AuthenticationResponse;
 import com.abi.agro_back.collection.RegisteringRequest;
 import com.abi.agro_back.service.RegisteringRequestService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,11 @@ public class RegisteringRequestController {
     @GetMapping("{id}")
     public ResponseEntity<RegisteringRequest> getRegisteringRequestById(@PathVariable("id") String id) {
         return ResponseEntity.ok(registeringRequestService.getRegisteringRequestById(id));
+    }
+
+    @GetMapping("/approve/{id}")
+    public ResponseEntity<AuthenticationResponse> approveRegisteringRequestById(@PathVariable("id") String id) {
+        return ResponseEntity.ok(registeringRequestService.approveRegisteringRequestById(id));
     }
 
     @GetMapping()

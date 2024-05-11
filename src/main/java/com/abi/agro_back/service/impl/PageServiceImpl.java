@@ -51,6 +51,11 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
+    public List<Page> getAllForApprovePages() {
+        return pageRepository.findAllByPublishedFalse();
+    }
+
+    @Override
     public org.springframework.data.domain.Page<Page> findAllByPage(Pageable pageable) {
         return pageRepository.findAllByPublishedTrue(pageable);
     }

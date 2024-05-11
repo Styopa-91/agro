@@ -42,11 +42,12 @@ public class AgrarianServiceImpl implements AgrarianService {
     @Override
     public Agrarian createAgrarian(MultipartFile image, Agrarian agrarian) throws IOException {
 
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
-        URL imageUrl = storageService.uploadPhoto(image, imageKey);
-        Photo imagePhoto = new Photo(imageKey, imageUrl);
-        agrarian.setImage(imagePhoto);
-
+        if (image != null) {
+            String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            agrarian.setImage(imagePhoto);
+        }
         return agrarianRepository.save(agrarian);
     }
 

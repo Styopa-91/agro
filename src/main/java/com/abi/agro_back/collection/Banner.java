@@ -30,14 +30,13 @@ public class Banner {
 
     private String location;
 
+    private String address;
+
     private String phone;
 
     private String email;
 
     private String url;
-
-//    @CreatedDate
-//    private LocalDateTime createdAt;
 
     private List<String> keyWords;
 

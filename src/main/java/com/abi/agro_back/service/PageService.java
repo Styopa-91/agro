@@ -15,6 +15,8 @@ public interface PageService {
 
     List<Page> getAllPages();
 
+    List<Page> getAllForApprovePages();
+
     org.springframework.data.domain.Page<Page> findAllByPage(Pageable pageable);
 
     Page updatePage(String pageId, Page updatedPage);

@@ -1,7 +1,7 @@
 package com.abi.agro_back.service;
 
+import com.abi.agro_back.auth.AuthenticationResponse;
 import com.abi.agro_back.collection.RegisteringRequest;
-import com.abi.agro_back.collection.User;
 
 import java.util.List;
 
@@ -16,4 +16,5 @@ public interface RegisteringRequestService {
 
     void deleteRegisteringRequest(String registeringRequestId);
 
+    AuthenticationResponse approveRegisteringRequestById(String id);
 }

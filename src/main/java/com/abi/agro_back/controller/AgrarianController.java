@@ -32,7 +32,7 @@ public class AgrarianController {
     private AgrarianService agrarianService;
 
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<Agrarian> createAgrarian(@RequestPart("image") MultipartFile image,
+    public ResponseEntity<Agrarian> createAgrarian(@RequestPart(name = "image", required = false) MultipartFile image,
                                                    @Valid @RequestPart Agrarian agrarian) throws IOException {
         return new ResponseEntity<>(agrarianService.createAgrarian(image, agrarian), HttpStatus.CREATED);
     }
