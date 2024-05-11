@@ -17,7 +17,7 @@ RUN mvn package -Dmaven.test.skip
 FROM openjdk:17-jdk-alpine
 
 # Copy the built JAR file from the "build" container to a new container
-COPY --from=build /app/target/propart-es-0.0.1-SNAPSHOT.jar /app/propart-es.jar
+COPY --from=build /app/target/agro_back-0.0.1-SNAPSHOT.jar /app/agro_back.jar
 
 # Define entry point for running the container
-ENTRYPOINT ["java","-jar","/app/propart-es.jar"]
+ENTRYPOINT ["java","-jar","/app/agro_back.jar"]
