@@ -1,0 +1,31 @@
+
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_NAME: baza-agro
+  CONTAINER_NAME: baza-agro-container
+
+build:
+  stage: build
+  image: maven:3.6.3-jdk-11
+  tags:
+    - deploy-agro
+
+  script:
+    - mvn clean package
+    - sudo docker build -t $IMAGE_NAME .
+  artifacts:
+    paths:
+      - target/
+
+deploy:
+  stage: deploy
+  tags:
+    - deploy-agro
+  image: docker:19.03.12
+  script:
+    - sudo docker run -d --rm --name $CONTAINER_NAME -p 8080:8080 $IMAGE_NAME
+  only:
+    - master
