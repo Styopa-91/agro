@@ -118,7 +118,7 @@ public class AgrarianServiceImpl implements AgrarianService {
             currentUserName = authentication.getName();
         }
         User user = userRepository.findByEmail(currentUserName).get();
-        List<Note> list = noteRepository.findAllByAgrarianIdIsAndUserIdIsOrderByCreatedAt(id, user.getId());
+        List<Note> list = noteRepository.findAllByAgrarianIdIsAndUserIdIsOrderByCreatedAtDesc(id, user.getId());
         return list;
     }
 

@@ -27,3 +27,4 @@ deploy:
   image: docker:19.03.12
   script:
     - sudo docker run -d --rm --name $CONTAINER_NAME -p 8080:8080 $IMAGE_NAME
+    - mvn package -Dmaven.test.skip
