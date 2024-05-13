@@ -28,7 +28,7 @@ public class Banner {
 
     private Photo img;
 
-    private String location;
+    private List<String> locations;
 
     private String address;
 

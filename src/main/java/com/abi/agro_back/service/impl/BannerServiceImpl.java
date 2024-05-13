@@ -75,7 +75,7 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public List<Banner> getBannersByKeySearch(String key, String oblast) {
         if (!oblast.isEmpty()) {
-            return bannerRepository.findBannersByKeyWordsIsContainingIgnoreCaseAndLocationIsIgnoreCase(key, oblast);
+            return bannerRepository.findBannersByKeyWordsIsContainingIgnoreCaseAndLocationsContainsIgnoreCase(key, oblast);
         } else {
             return bannerRepository.findBannersByKeyWordsIsContainingIgnoreCase(key);
         }
@@ -83,6 +83,6 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public List<Banner> getAllBannersByOblast(String oblast) {
-        return bannerRepository.findBannersByLocationIs(oblast);
+        return bannerRepository.findBannersByLocationsContains(oblast);
     }
 }
