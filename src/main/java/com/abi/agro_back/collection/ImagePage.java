@@ -42,6 +42,8 @@ public class ImagePage {
 
     private String person;
 
+    private boolean visible;
+
     private List<String> keyWords;
 
 }

@@ -76,7 +76,7 @@ public class ImagePageServiceImpl implements ImagePageService {
 
     @Override
     public Page<ImagePage> findAllByPage(Pageable pageable) {
-        return imagePageRepository.findAll(pageable);
+        return imagePageRepository.findAllByVisibleIsTrue(pageable);
     }
 
     @Override
