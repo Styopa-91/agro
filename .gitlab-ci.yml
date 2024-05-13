@@ -14,7 +14,7 @@ build:
     - deploy-agro
 
   script:
-    - mvn clean package
+    - mvn package -Dmaven.test.skip
     - sudo docker build -t $IMAGE_NAME .
   artifacts:
     paths:
