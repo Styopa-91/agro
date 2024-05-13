@@ -52,6 +52,7 @@ public class AgrarianController {
     @GetMapping("{id}")
     public ResponseEntity<Agrarian> getAgrarianById(@PathVariable("id") String id) {
         Agrarian agrarian = agrarianService.getAgrarianById(id);
+
         return ResponseEntity.ok(agrarian);
     }
 
