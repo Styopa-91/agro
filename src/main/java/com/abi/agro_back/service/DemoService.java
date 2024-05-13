@@ -10,6 +10,8 @@ import java.util.List;
 public interface DemoService {
 
     Page<Agrarian> getAllAgrariansByRegion(Pageable pageable);
+    List<Agrarian> getAllExcelAgrarians(String obl, String reg);
+    List<VillageCouncil> getAllExcelVillageCouncils(String obl, String reg);
     List<Agrarian> getAllDemoAgrarians();
     List<VillageCouncil> getAllVillageCouncilsByRegion();
 }

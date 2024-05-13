@@ -17,7 +17,11 @@ public interface VillageCouncilRepository extends MongoRepository<VillageCouncil
     List<VillageCouncil> findAllByOblastAndOldRegionOrderByImageDescTitleAsc(String oblast, String oldRegion);
     long countAllByOblastEquals(String oblast);
     long countAllByOblastEqualsAndOldRegionEquals(String oblast, String region);
-
+    @Aggregation(pipeline = {
+            "{'$match': {'oblast': ?0, 'oldRegion': ?1}}",
+            "{ $addFields: { 'fillScore': { $sum: [ { $cond: [{ $gt: [{ $size: '$phones' }, 0] }, 1, 0] }, { $cond: [{ $gt: [{ $size: '$emails' }, 0] }, 1, 0] }] } } }",
+            "{ $sort: { 'fillScore': -1, 'title': 1 } }"
+    })
     List<VillageCouncil> findAllByOblastAndOldRegion(String oblast, String region);
 
 }

@@ -59,6 +59,18 @@ public class DemoController {
         return demoService.getAllDemoAgrarians();
     }
 
+    @GetMapping("/excelAgrarians")
+    public List<Agrarian> getExcelDemoAgrarians(@RequestParam("oblast") String oblast,
+                                                @RequestParam("region") String region) {
+        return demoService.getAllExcelAgrarians(oblast, region);
+    }
+
+    @GetMapping("/excelVillageCouncils")
+    public List<VillageCouncil> getExcelDemoVillageCouncils(@RequestParam("oblast") String oblast,
+                                                            @RequestParam("region") String region) {
+        return demoService.getAllExcelVillageCouncils(oblast, region);
+    }
+
     @GetMapping("/villageCouncils")
     public List<VillageCouncil> getAllVillageCouncilsByRegion() {
         return demoService.getAllVillageCouncilsByRegion();
