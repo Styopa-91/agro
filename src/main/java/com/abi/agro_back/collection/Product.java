@@ -27,6 +27,8 @@ public class Product {
 
     private Photo image;
 
+    private String redirect;
+
     private String imagePageId;
 
 }

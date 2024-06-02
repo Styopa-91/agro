@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class Agrarian {
 
     private boolean isPriority;
 
-    private boolean isForOblastOnly;
+//    private boolean isForOblastOnly;
 
     private String redirect;
 

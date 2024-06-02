@@ -38,6 +38,8 @@ public class Banner {
 
     private String url;
 
+    private boolean bannerAgro;
+
     private List<String> keyWords;
 
 }

@@ -12,4 +12,5 @@ public interface BannerRepository extends MongoRepository<Banner, String> {
     List<Banner> findBannersByKeyWordsIsContainingIgnoreCaseAndLocationsContainsIgnoreCase(String key, String location);
 
     List<Banner> findBannersByLocationsContains(String oblast);
+    List<Banner> findBannersByLocationsContainsAndBannerAgroTrue(String oblast);
 }

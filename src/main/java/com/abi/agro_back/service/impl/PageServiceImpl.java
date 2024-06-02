@@ -2,13 +2,18 @@ package com.abi.agro_back.service.impl;
 
 import com.abi.agro_back.collection.Page;
 import com.abi.agro_back.collection.PageDto;
+import com.abi.agro_back.collection.Photo;
+import com.abi.agro_back.config.StorageService;
 import com.abi.agro_back.exception.ResourceNotFoundException;
 import com.abi.agro_back.repository.PageRepository;
 import com.abi.agro_back.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @Service
@@ -16,6 +21,9 @@ public class PageServiceImpl implements PageService {
 
     @Autowired
     private PageRepository pageRepository;
+
+    @Autowired
+    private StorageService storageService;
 
     @Override
     public Page createPage(PageDto page) {
@@ -60,12 +68,22 @@ public class PageServiceImpl implements PageService {
         return pageRepository.findAllByPublishedTrue(pageable);
     }
     @Override
-    public Page updatePage(String pageId, Page updatedPage) {
+    public Page updatePage(String pageId, MultipartFile image, Page updatedPage) throws IOException {
 
         Page page = pageRepository.findById(pageId).orElseThrow(
                 () -> new ResourceNotFoundException("Page is not exists with given id: " + pageId)
         );
         updatedPage.setId(page.getId());
+
+        if (image != null) {
+            String imageKey = System.currentTimeMillis()+ "" + image.getOriginalFilename();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            if (page.getImage() != null) {
+                storageService.deletePhoto(page.getImage().getKey());
+            }
+            updatedPage.setImage(imagePhoto);
+        }
 
         return pageRepository.save(updatedPage);
     }

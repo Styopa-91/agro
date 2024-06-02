@@ -34,19 +34,22 @@ public class ExhibitionController {
 
     @Autowired
     private StorageService storageService;
+
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<Exhibition> createExhibition(@RequestPart("photos") List<MultipartFile> photos,
-                                                       @RequestPart("image") MultipartFile image,
+    public ResponseEntity<Exhibition> createExhibition(@RequestPart(name = "photos", required = false) List<MultipartFile> photos,
+                                                       @RequestPart(name = "image", required = false) MultipartFile image,
                                                        @Valid @RequestPart("exhibition") Exhibition exhibition) throws IOException {
         exhibition.setGalleryPhotos(new ArrayList<>());
-        for (MultipartFile f : photos) {
-            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
-            URL url = storageService.uploadPhoto(f, key);
-            Photo photo = new Photo(key, url);
-            exhibition.getGalleryPhotos().add(photo);
+        if (photos != null) {
+            for (MultipartFile f : photos) {
+                String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+                URL url = storageService.uploadPhoto(f, key);
+                Photo photo = new Photo(key, url);
+                exhibition.getGalleryPhotos().add(photo);
+            }
         }
 
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        String imageKey = System.currentTimeMillis() + "" + image.getOriginalFilename();
         URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
         exhibition.setImage(imagePhoto);
@@ -124,11 +127,13 @@ public class ExhibitionController {
         return ResponseEntity.ok(exhibitionService.getAllExhibitions());
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Exhibition> updateExhibition(@PathVariable("id") String  exhibitionId,
-                                              @RequestBody @Valid Exhibition updatedExhibition) {
+                                                       @RequestPart(name = "photos", required = false) List<MultipartFile> photos,
+                                                       @RequestPart(name = "image", required = false) MultipartFile image,
+                                                       @RequestPart @Valid Exhibition updatedExhibition) throws IOException {
 
-        return ResponseEntity.ok(exhibitionService.updateExhibition(exhibitionId, updatedExhibition));
+        return ResponseEntity.ok(exhibitionService.updateExhibition(exhibitionId, image, photos, updatedExhibition));
     }
 
     @DeleteMapping("{id}")

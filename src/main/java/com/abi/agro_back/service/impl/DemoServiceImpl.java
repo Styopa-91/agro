@@ -53,6 +53,16 @@ public class DemoServiceImpl implements DemoService {
         return villageCouncilRepository.findAllByOblastAndOldRegion(obl, reg);
     }
 
+    @Override
+    public List<Agrarian> getAllExcelOblAgrarians(String obl) {
+        return agrarianRepository.findAllByOblast(obl);
+    }
+
+    @Override
+    public List<VillageCouncil> getAllExcelOblVillageCouncils(String obl) {
+        return villageCouncilRepository.findAllByOblast(obl);
+    }
+
     public List<VillageCouncil> getAllVillageCouncilsByRegion() {
         String oblast = demoRepository.findAll().get(0).getOblast();
         String region = demoRepository.findAll().get(0).getOldRegion();

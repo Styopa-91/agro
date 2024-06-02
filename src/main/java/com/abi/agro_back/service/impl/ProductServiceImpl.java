@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(MultipartFile image, Product product) throws IOException {
 
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        String imageKey = System.currentTimeMillis() + "" + image.getOriginalFilename();
         URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
         product.setImage(imagePhoto);

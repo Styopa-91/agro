@@ -43,12 +43,33 @@ public class AgrarianServiceImpl implements AgrarianService {
     public Agrarian createAgrarian(MultipartFile image, Agrarian agrarian) throws IOException {
 
         if (image != null) {
-            String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+            String imageKey = System.currentTimeMillis() + "" +image.getOriginalFilename();
             URL imageUrl = storageService.uploadPhoto(image, imageKey);
             Photo imagePhoto = new Photo(imageKey, imageUrl);
             agrarian.setImage(imagePhoto);
         }
         return agrarianRepository.save(agrarian);
+    }
+
+    @Override
+    public Agrarian updateAgrarian(String agrarianId, MultipartFile image, Agrarian updatedAgrarian) throws IOException {
+
+        Agrarian agrarian = agrarianRepository.findById(agrarianId).orElseThrow(
+                () -> new ResourceNotFoundException("Agrarian is not exists with given id: " + agrarianId)
+        );
+        updatedAgrarian.setId(agrarian.getId());
+
+        if (image != null) {
+            String imageKey = System.currentTimeMillis()+ "" + image.getOriginalFilename();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            if (agrarian.getImage() != null) {
+                storageService.deletePhoto(agrarian.getImage().getKey());
+            }
+            updatedAgrarian.setImage(imagePhoto);
+        }
+
+        return agrarianRepository.save(updatedAgrarian);
     }
 
     @Override
@@ -65,17 +86,6 @@ public class AgrarianServiceImpl implements AgrarianService {
     }
 
     @Override
-    public Agrarian updateAgrarian(String agrarianId, Agrarian updatedAgrarian) {
-
-        Agrarian agrarian = agrarianRepository.findById(agrarianId).orElseThrow(
-                () -> new ResourceNotFoundException("Agrarian is not exists with given id: " + agrarianId)
-        );
-        updatedAgrarian.setId(agrarian.getId());
-
-        return agrarianRepository.save(updatedAgrarian);
-    }
-
-    @Override
     public void deleteAgrarian(String agrarianId) {
 
         Agrarian agrarian = agrarianRepository.findById(agrarianId)
@@ -85,10 +95,10 @@ public class AgrarianServiceImpl implements AgrarianService {
         agrarianRepository.deleteById(agrarianId);
     }
 
-    @Override
-    public List<Agrarian> getAllAgrariansByOblast(String oblast) {
-        return agrarianRepository.findAllByOblastAndIsForOblastOnlyTrueOrderByIsPriorityDescTitleAsc(oblast);
-    }
+//    @Override
+//    public List<Agrarian> getAllAgrariansByOblast(String oblast) {
+//        return agrarianRepository.findAllByOblastAndIsForOblastOnlyTrueOrderByIsPriorityDescTitleAsc(oblast);
+//    }
 
     @Override
     public List<Agrarian> getAllAgrariansByPriority() {

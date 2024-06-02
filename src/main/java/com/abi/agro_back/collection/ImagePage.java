@@ -46,4 +46,6 @@ public class ImagePage {
 
     private List<String> keyWords;
 
+    private List<Socials> socials;
+
 }

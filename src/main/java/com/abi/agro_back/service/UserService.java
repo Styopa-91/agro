@@ -23,4 +23,6 @@ public interface UserService {
     User getUserByPasswordResetToken(String token);
 
     void changeUserPassword(User user, String password);
+
+    Boolean checkOblastApprove(String oblast);
 }

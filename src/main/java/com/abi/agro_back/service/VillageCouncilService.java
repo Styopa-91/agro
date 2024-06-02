@@ -13,7 +13,7 @@ public interface VillageCouncilService {
 
     List<VillageCouncil> getAllVillageCouncils();
 
-    VillageCouncil updateVillageCouncil(String villageCouncilId, VillageCouncil updatedVillageCouncil);
+    VillageCouncil updateVillageCouncil(String villageCouncilId, MultipartFile image, VillageCouncil updatedVillageCouncil) throws IOException;
 
     void deleteVillageCouncil(String  villageCouncilId);
 

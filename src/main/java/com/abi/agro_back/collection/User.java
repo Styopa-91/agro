@@ -3,11 +3,13 @@ package com.abi.agro_back.collection;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -31,6 +33,11 @@ public class User implements UserDetails {
     private String password;
 
     private Role role;
+
+    private List<String> oblasts;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date endDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

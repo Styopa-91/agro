@@ -25,12 +25,33 @@ public class VillageCouncilImpl implements VillageCouncilService {
     @Override
     public VillageCouncil createVillageCouncil(MultipartFile image, VillageCouncil villageCouncil) throws IOException {
 
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        String imageKey = System.currentTimeMillis() + "" + image.getOriginalFilename();
         URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
         villageCouncil.setImage(imagePhoto);
 
         return villageCouncilRepository.save(villageCouncil);
+    }
+
+    @Override
+    public VillageCouncil updateVillageCouncil(String villageCouncilId, MultipartFile image, VillageCouncil updatedVillageCouncil) throws IOException {
+
+        VillageCouncil villageCouncil = villageCouncilRepository.findById(villageCouncilId).orElseThrow(
+                () -> new ResourceNotFoundException("VillageCouncil is not exists with given id: " + villageCouncilId)
+        );
+        updatedVillageCouncil.setId(villageCouncil.getId());
+
+        if (image != null) {
+            String imageKey = System.currentTimeMillis() + "" + image.getOriginalFilename();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            if (villageCouncil.getImage() != null) {
+                storageService.deletePhoto(villageCouncil.getImage().getKey());
+            }
+            updatedVillageCouncil.setImage(imagePhoto);
+        }
+
+        return villageCouncilRepository.save(updatedVillageCouncil);
     }
 
     @Override
@@ -44,17 +65,6 @@ public class VillageCouncilImpl implements VillageCouncilService {
     public List<VillageCouncil> getAllVillageCouncils() {
 
         return villageCouncilRepository.findAll();
-    }
-
-    @Override
-    public VillageCouncil updateVillageCouncil(String villageCouncilId, VillageCouncil updatedVillageCouncil) {
-
-        VillageCouncil villageCouncil = villageCouncilRepository.findById(villageCouncilId).orElseThrow(
-                () -> new ResourceNotFoundException("VillageCouncil is not exists with given id: " + villageCouncilId)
-        );
-        updatedVillageCouncil.setId(villageCouncil.getId());
-
-        return villageCouncilRepository.save(updatedVillageCouncil);
     }
 
     @Override

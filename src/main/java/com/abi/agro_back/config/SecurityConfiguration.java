@@ -65,12 +65,17 @@ public class SecurityConfiguration {
                                 .requestMatchers(GET, "/api/agrarians").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(GET, "/api/agrarians/count").permitAll()
                                 .requestMatchers(GET, "/api/agrarians/count/**").permitAll()
-                                .requestMatchers(GET, "/api/agrarians/**").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/agrarians/notes/**").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(POST, "/api/agrarians/note").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/agrarians/priority").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/agrarians/oblast").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/agrarians/region").permitAll()
                                 .requestMatchers(POST, "/api/agrarians/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/agrarians/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/agrarians/**").hasAuthority(ADMIN.name())
 
                                 .requestMatchers(GET, "/api/villageCouncil").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/villageCouncil/region").permitAll()
                                 .requestMatchers(GET, "/api/villageCouncil/**").hasAnyAuthority(USER.name(), ADMIN.name())
                                 .requestMatchers(POST, "/api/villageCouncil/**").hasAnyAuthority(ADMIN.name())
                                 .requestMatchers(PUT, "/api/villageCouncil/**").hasAuthority(ADMIN.name())
@@ -104,6 +109,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(GET, "/api/pages/**").permitAll()
                                 .requestMatchers(POST, "/api/pages/**").hasAnyAuthority(ADMIN.name(), USER.name())
                                 .requestMatchers(PUT, "/api/pages/**").hasAuthority(ADMIN.name())
+                                .requestMatchers(PATCH, "/api/pages/**").hasAuthority(ADMIN.name())
                                 .requestMatchers(DELETE, "/api/pages/**").hasAuthority(ADMIN.name())
 
                                 .requestMatchers(GET, "/api/demo/agrarians").permitAll()
@@ -111,6 +117,11 @@ public class SecurityConfiguration {
                                 .requestMatchers(GET, "/api/demo/get").permitAll()
                                 .requestMatchers(GET, "/api/demo/villageCouncils").permitAll()
                                 .requestMatchers(POST, "/api/demo/admin/set").hasAuthority(ADMIN.name())
+
+                                .requestMatchers(GET, "/api/oblastConfig/all/**").permitAll()
+                                .requestMatchers(GET, "/api/oblastConfig/delete").hasAuthority(ADMIN.name())
+                                .requestMatchers(POST, "/api/oblastConfig/set").hasAuthority(ADMIN.name())
+
 
                                 .anyRequest()
                                 .authenticated()

@@ -35,14 +35,19 @@ public class PageController {
     @Autowired
     private StorageService storageService;
 
-    @PostMapping
-    public ResponseEntity<Page> createPage(@RequestPart("image") MultipartFile image,
+    @PostMapping(consumes = { "multipart/form-data" })
+    public ResponseEntity<Page> createPage(@RequestPart(name = "image", required = false) MultipartFile image,
                                               @Valid @RequestPart("page") PageDto page) throws IOException {
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
-        URL imageUrl = storageService.uploadPhoto(image, imageKey);
-        Photo imagePhoto = new Photo(imageKey, imageUrl);
-        page.setImage(imagePhoto);
-        return new ResponseEntity<>(pageService.createPage(page), HttpStatus.CREATED);
+        if (image != null){
+            String imageKey = System.currentTimeMillis() + "" + image.getOriginalFilename();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            page.setImage(imagePhoto);
+            return new ResponseEntity<>(pageService.createPage(page), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(pageService.createPage(page), HttpStatus.CREATED);
+        }
+
     }
     @PatchMapping("/admin/approve/{id}")
     public ResponseEntity<?> approveEntity(@PathVariable String id) {
@@ -72,10 +77,11 @@ public class PageController {
                                                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
         return pageService.findAllByPage(PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName()));
     }
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Page> updatePage(@PathVariable("id") String  pageId,
-                                              @RequestBody Page updatedPage) {
-        return ResponseEntity.ok(pageService.updatePage(pageId, updatedPage));
+                                           @RequestPart(name = "image", required = false) MultipartFile image,
+                                           @RequestPart Page updatedPage) throws IOException {
+        return ResponseEntity.ok(pageService.updatePage(pageId, image, updatedPage));
     }
 
     @DeleteMapping("{id}")

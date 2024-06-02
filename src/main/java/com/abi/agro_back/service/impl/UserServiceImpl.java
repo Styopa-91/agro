@@ -9,6 +9,10 @@ import com.abi.agro_back.repository.UserRepository;
 import com.abi.agro_back.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public org.springframework.data.domain.Page<User> getAllUsers(Pageable pageable) {
         Role role = Role.USER;
-        return userRepository.findAllByRole(role, pageable);
+        return userRepository.findAllByRoleOrderByIdDesc(role, pageable);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
         updatedUser.setId(userId);
 
-        return userRepository.save(user);
+        return userRepository.save(updatedUser);
     }
 
     @Override
@@ -88,6 +92,16 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
 
+    }
+
+    @Override
+    public Boolean checkOblastApprove(String oblast) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            User user = (User) authentication.getPrincipal();
+            return user.getOblasts().contains(oblast) && user.getEndDate().after(new Date(System.currentTimeMillis()));
+        }
+        throw new ResourceNotFoundException("User not authenticated");
     }
 
     @Override

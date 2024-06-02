@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping
     public ResponseEntity<User> createUser(@Validated @RequestBody User user) {
@@ -77,6 +81,16 @@ public class UserController {
         return ResponseEntity.ok("Link for reset password sent to email");
     }
 
+    @GetMapping("/resetPasswordAdmin/{id}")
+    public ResponseEntity<String> resetPasswordForAdmin(@PathVariable("id") String userId) {
+        User user = userService.getUserById(userId);
+
+        userService.changeUserPassword(user, "11111111");
+        mailSender.sendEmail(user.getEmail(), "11111111");
+
+        return ResponseEntity.ok("Link for reset password sent to email");
+    }
+
     @GetMapping("/savePassword")
     public ResponseEntity<String> savePassword(@RequestParam("token") String token,
                                                @RequestParam("password") String password) {
@@ -93,6 +107,12 @@ public class UserController {
         } else {
             return ResponseEntity.ok("Password have not updated");
         }
+    }
+
+    @GetMapping("/check/{oblast}")
+    public ResponseEntity<Boolean> checkOblastApprove(@PathVariable("oblast") String oblast) {
+        Boolean isApprove = userService.checkOblastApprove(oblast);
+        return ResponseEntity.ok(isApprove);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

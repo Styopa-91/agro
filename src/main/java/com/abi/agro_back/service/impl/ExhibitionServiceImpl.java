@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -43,12 +46,31 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
 
     @Override
-    public Exhibition updateExhibition(String exhibitionId, Exhibition updatedExhibition) {
+    public Exhibition updateExhibition(String exhibitionId, MultipartFile image, List<MultipartFile> photos, Exhibition updatedExhibition) throws IOException {
 
         Exhibition exhibition = exhibitionRepository.findById(exhibitionId).orElseThrow(
                 () -> new ResourceNotFoundException("Exhibition is not exists with given id: " + exhibitionId)
         );
         updatedExhibition.setId(exhibition.getId());
+
+        if (photos != null) {
+            for (MultipartFile f : photos) {
+                String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+                URL url = storageService.uploadPhoto(f, key);
+                Photo photo = new Photo(key, url);
+                updatedExhibition.getGalleryPhotos().add(photo);
+            }
+        }
+
+        if (image != null) {
+            String imageKey = System.currentTimeMillis()+ "" + image.getOriginalFilename();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            if (exhibition.getImage() != null) {
+                storageService.deletePhoto(exhibition.getImage().getKey());
+            }
+            updatedExhibition.setImage(imagePhoto);
+        }
 
         return exhibitionRepository.save(updatedExhibition);
     }

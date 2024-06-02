@@ -12,6 +12,8 @@ public interface DemoService {
     Page<Agrarian> getAllAgrariansByRegion(Pageable pageable);
     List<Agrarian> getAllExcelAgrarians(String obl, String reg);
     List<VillageCouncil> getAllExcelVillageCouncils(String obl, String reg);
+    List<Agrarian> getAllExcelOblAgrarians(String obl);
+    List<VillageCouncil> getAllExcelOblVillageCouncils(String obl);
     List<Agrarian> getAllDemoAgrarians();
     List<VillageCouncil> getAllVillageCouncilsByRegion();
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -58,6 +59,8 @@ public class AuthenticationService {
                 .phone(request.getPhone())
                 .password(passwordEncoder.encode(passForDB))
                 .role(Role.USER)
+                .oblasts(new ArrayList<>())
+                .endDate(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 3))
                 .build();
         repository.save(user);
         mailSender.sendEmail(request.getEmail(), passForDB);

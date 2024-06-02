@@ -7,26 +7,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("service_requests")
-public class ServiceRequest {
+@Document("oblastConfig")
+public class OblastConfig {
     @Id
     private String id;
 
-    private List<String> services;
+    private String oblast;
 
-    private String organization;
+    private String oldRegion;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
-    private String phone;
 }

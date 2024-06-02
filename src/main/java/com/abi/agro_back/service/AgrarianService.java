@@ -16,11 +16,11 @@ public interface AgrarianService {
 
     List<Agrarian> getAllAgrarians();
 
-    Agrarian updateAgrarian(String agrarianId, Agrarian updatedAgrarian);
+    Agrarian updateAgrarian(String agrarianId, MultipartFile image, Agrarian updatedAgrarian) throws IOException;
 
     void deleteAgrarian(String  agrarianId);
 
-    List<Agrarian> getAllAgrariansByOblast(String oblast);
+//    List<Agrarian> getAllAgrariansByOblast(String oblast);
 
     List<Agrarian> getAllAgrariansByPriority();
 

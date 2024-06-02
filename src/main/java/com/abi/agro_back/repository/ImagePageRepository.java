@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ImagePageRepository extends MongoRepository<ImagePage, String> {
-    List<ImagePage> findImagePagesByKeyWordsIsContainingIgnoreCase(String key);
+    List<ImagePage> findImagePagesByKeyWordsIsContainingIgnoreCaseAndVisibleTrue(String key);
     Page<ImagePage> findAllByVisibleIsTrue(Pageable pageable);
 }

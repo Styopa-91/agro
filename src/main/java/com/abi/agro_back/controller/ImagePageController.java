@@ -38,20 +38,22 @@ public class ImagePageController {
     private StorageService storageService;
 
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<ImagePage> createImagePage(@RequestPart("photos") List<MultipartFile> photos,
-                                                     @RequestPart("image") MultipartFile image,
+    public ResponseEntity<ImagePage> createImagePage(@RequestPart(name = "photos", required = false) List<MultipartFile> photos,
+                                                     @RequestPart(name = "image", required = false) MultipartFile image,
 //                                                     @RequestPart("logo") MultipartFile logo,
                                                      @Valid @RequestPart("imagePage") ImagePage imagePage) throws IOException {
 
         imagePage.setGalleryPhotos(new ArrayList<>());
-        for (MultipartFile f : photos) {
-            String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
-            URL url = storageService.uploadPhoto(f, key);
-            Photo photo = new Photo(key, url);
-            imagePage.getGalleryPhotos().add(photo);
+        if (photos != null) {
+            for (MultipartFile f : photos) {
+                String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+                URL url = storageService.uploadPhoto(f, key);
+                Photo photo = new Photo(key, url);
+                imagePage.getGalleryPhotos().add(photo);
+            }
         }
 
-        String imageKey = image.getOriginalFilename() + "" + System.currentTimeMillis();
+        String imageKey = System.currentTimeMillis() + "" + image.getOriginalFilename();
         URL imageUrl = storageService.uploadPhoto(image, imageKey);
         Photo imagePhoto = new Photo(imageKey, imageUrl);
         imagePage.setImage(imagePhoto);
@@ -73,30 +75,35 @@ public class ImagePageController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ImagePage>> getAllImagePages() {
-
-        return ResponseEntity.ok(imagePageService.getAllImagePages());
+    public Page<ImagePage> getAllImagePages(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "20") int sizePerPage,
+                                            @RequestParam(defaultValue = "TITLE") SortField sortField,
+                                            @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
+        Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
+        return imagePageService.getAllImagePages(pageable);
     }
 
-    @PutMapping(value = "{id}")
+    @GetMapping("/page")
+    public Page<ImagePage> findAllByPage(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "20") int sizePerPage,
+                                         @RequestParam(defaultValue = "TITLE") SortField sortField,
+                                         @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
+        Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
+        return imagePageService.findAllByPage(pageable);
+    }
+
+    @PutMapping(value = "{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<ImagePage> updateImagePage(@PathVariable("id") String  imagePageId,
-                                              @RequestBody ImagePage updatedImagePage) {
-        return ResponseEntity.ok(imagePageService.updateImagePage(imagePageId, updatedImagePage));
+                                                     @RequestPart(name = "photos", required = false) List<MultipartFile> photos,
+                                                     @RequestPart(name = "image", required = false) MultipartFile image,
+                                                     @RequestPart ImagePage updatedImagePage) throws IOException {
+        return ResponseEntity.ok(imagePageService.updateImagePage(imagePageId, image, photos, updatedImagePage));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteImagePageById(@PathVariable("id") String  id) {
         imagePageService.deleteImagePage(id);
         return ResponseEntity.ok("ImagePage deleted successfully!");
-    }
-
-    @GetMapping("/page")
-    public Page<ImagePage> findAllByPage(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "20") int sizePerPage,
-                                          @RequestParam(defaultValue = "TITLE") SortField sortField,
-                                          @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
-        Pageable pageable = PageRequest.of(page, sizePerPage, sortDirection, sortField.getDatabaseFieldName());
-        return imagePageService.findAllByPage(pageable);
     }
 
     @GetMapping("/search")

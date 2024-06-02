@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @Service
@@ -40,18 +42,42 @@ public class ImagePageServiceImpl implements ImagePageService {
     }
 
     @Override
-    public List<ImagePage> getAllImagePages() {
+    public Page<ImagePage> getAllImagePages(Pageable pageable) {
 
-        return imagePageRepository.findAll();
+        return imagePageRepository.findAll(pageable);
+    }
+    @Override
+    public Page<ImagePage> findAllByPage(Pageable pageable) {
+        return imagePageRepository.findAllByVisibleIsTrue(pageable);
     }
 
     @Override
-    public ImagePage updateImagePage(String imagePageId, ImagePage updatedImagePage) {
+    public ImagePage updateImagePage(String imagePageId, MultipartFile image, List<MultipartFile> photos, ImagePage updatedImagePage) throws IOException {
 
         ImagePage imagePage = imagePageRepository.findById(imagePageId).orElseThrow(
                 () -> new ResourceNotFoundException("ImagePage is not exists with given id: " + imagePageId)
         );
+
         updatedImagePage.setId(imagePage.getId());
+
+        if (photos != null) {
+            for (MultipartFile f : photos) {
+                String key = f.getOriginalFilename() + "" + System.currentTimeMillis();
+                URL url = storageService.uploadPhoto(f, key);
+                Photo photo = new Photo(key, url);
+                updatedImagePage.getGalleryPhotos().add(photo);
+            }
+        }
+
+        if (image != null) {
+            String imageKey = System.currentTimeMillis()+ "" + image.getOriginalFilename();
+            URL imageUrl = storageService.uploadPhoto(image, imageKey);
+            Photo imagePhoto = new Photo(imageKey, imageUrl);
+            if (imagePage.getImage() != null) {
+                storageService.deletePhoto(imagePage.getImage().getKey());
+            }
+            updatedImagePage.setImage(imagePhoto);
+        }
 
         return imagePageRepository.save(updatedImagePage);
     }
@@ -75,12 +101,7 @@ public class ImagePageServiceImpl implements ImagePageService {
     }
 
     @Override
-    public Page<ImagePage> findAllByPage(Pageable pageable) {
-        return imagePageRepository.findAllByVisibleIsTrue(pageable);
-    }
-
-    @Override
     public List<ImagePage> getImagePagesByKeySearch(String key) {
-            return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCase(key);
+            return imagePageRepository.findImagePagesByKeyWordsIsContainingIgnoreCaseAndVisibleTrue(key);
     }
 }
